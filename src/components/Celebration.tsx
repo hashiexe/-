@@ -45,7 +45,10 @@ export function Celebration({ data, onClose }: Props) {
   return (
     <div className="overlay" onClick={onClose}>
       <div className="clear-card" onClick={(e) => e.stopPropagation()}>
-        <Mascot size={78} className={`celebrate-mascot ${data.anim}`} />
+        <div className="celebrate-duo">
+          <Mascot size={72} className={`celebrate-mascot ${data.anim}`} />
+          <Mascot size={48} className={`celebrate-mascot celebrate-child ${data.anim}`} />
+        </div>
         <h2>{data.label === 'GOAL' ? 'GOAL' : `STAGE ${data.label}`} クリア!</h2>
         <p className="reaction">{data.reaction}</p>
         <p className="goal-text">{data.goal || data.title}</p>
