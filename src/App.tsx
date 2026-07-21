@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGate } from './hooks/useGate';
 import { useRoadmap } from './hooks/useRoadmap';
 import { deriveStages, labelForStage, sortedWorlds } from './lib/labels';
@@ -10,16 +10,82 @@ import { Celebration, type CelebrationData } from './components/Celebration';
 import { ActivityLogPanel } from './components/ActivityLogPanel';
 import { Mascot } from './components/Mascot';
 
-// 進み具合に応じた応援メッセージ（ビジネスに詳しくなくても楽しく進められるように）
-function cheerMessage(cleared: number, total: number): string {
-  if (total === 0) return 'ステージを追加してみよう！';
-  if (cleared === 0) return 'さあ、はじめよう！🍠';
-  const r = cleared / total;
-  if (r >= 1) return 'ぜんぶクリア！おめでとう🎉';
-  if (r < 0.25) return 'いいスタート！その調子〜✨';
-  if (r < 0.5) return 'どんどん進んでるね！';
-  if (r < 0.75) return 'はんぶん超え！すごいっ💪';
-  return 'ゴールはすぐそこ！あとちょっと🏮';
+// いものすけをなでた時のひとこと（ゆるっと可愛い雰囲気）
+const IMONO_LINES = [
+  'おなかすいたよぉ',
+  'たいようで ねむくなっちゃう…',
+  'おいしく やいてね♪',
+  'ほくほくに なりたいな',
+  'むらさきのかわ、じまんなんだ',
+  'あまく なってきたかな？',
+  'ゆげ でてる？ あつあつだよ',
+  'なでてくれて ありがと〜',
+  'きょうも がんばろ〜',
+  'ひとやすみ しよ？',
+  'つぎのステージ いってみよ！',
+  'とろりのお店、たのしみだね',
+  'ぽかぽか きもちいい〜',
+  'いっしょに がんばろうね',
+  'おいもは しあわせの あじ',
+  'えへへ、くすぐったい',
+];
+
+// 進み具合ごとの応援メッセージ（開くたびにランダムで1つ選ぶ）
+const CHEERS = {
+  empty: ['ステージを ついかしてみよう！', '＋ボタンで はじめよう'],
+  start: [
+    'さあ、はじめよう！🍠',
+    'まずは ひとつ、いってみよ〜',
+    'どのステージからでも OK！',
+    'きょうの いっぽを ふみだそう✨',
+    'いものすけと しゅっぱつ！',
+  ],
+  low: [
+    'いいスタート！その調子〜✨',
+    'ちょっとずつ すすんでる♪',
+    'その いきだよ〜',
+    'ひとつクリア、えらい！',
+    'ぼちぼち いこう🍠',
+  ],
+  mid: [
+    'どんどん すすんでるね！',
+    'のってきた〜✨',
+    'いい ペース！',
+    'もう これだけ できたよ',
+    'いものすけ うれしそう😊',
+  ],
+  high: [
+    'はんぶん こえた！すごいっ💪',
+    'ここまで きたね、えらい！',
+    'うしろ半分、みえてきた✨',
+    'ばっちり ちょうし♪',
+    'あと はんぶん、たのしも〜',
+  ],
+  almost: [
+    'ゴールは すぐそこ！あとちょっと🏮',
+    'ラストスパート〜✨',
+    'もうちょっとで とろりのお店！',
+    'ここまで きたら いける！',
+    'あとすこし、ふぁいと💪',
+  ],
+  done: [
+    'ぜんぶクリア！おめでとう🎉',
+    'やったね！かんぺき✨',
+    'とろりロード せいは！すごい🏮',
+    'ふたりで やりきったね🎉',
+  ],
+};
+
+function cheerMessage(cleared: number, total: number, seed: number): string {
+  let pool: string[];
+  if (total === 0) pool = CHEERS.empty;
+  else if (cleared === 0) pool = CHEERS.start;
+  else if (cleared >= total) pool = CHEERS.done;
+  else {
+    const r = cleared / total;
+    pool = r < 0.25 ? CHEERS.low : r < 0.5 ? CHEERS.mid : r < 0.75 ? CHEERS.high : CHEERS.almost;
+  }
+  return pool[Math.floor(seed * pool.length) % pool.length];
 }
 
 export default function App() {
@@ -29,6 +95,26 @@ export default function App() {
   const [celebration, setCelebration] = useState<CelebrationData | null>(null);
   const [showLog, setShowLog] = useState(false);
   const [reorderMode, setReorderMode] = useState(false);
+  const [speech, setSpeech] = useState<string | null>(null);
+  const [tapCount, setTapCount] = useState(0);
+  const speechTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  // このセッション（＝この画面を開いている間）で固定の応援メッセージ。開くたびに変わる
+  const [cheerSeed] = useState(() => Math.random());
+
+  useEffect(() => () => clearTimeout(speechTimer.current), []);
+
+  const speak = () => {
+    setSpeech((prev) => {
+      let line = IMONO_LINES[Math.floor(Math.random() * IMONO_LINES.length)];
+      if (IMONO_LINES.length > 1) {
+        while (line === prev) line = IMONO_LINES[Math.floor(Math.random() * IMONO_LINES.length)];
+      }
+      return line;
+    });
+    setTapCount((n) => n + 1);
+    clearTimeout(speechTimer.current);
+    speechTimer.current = setTimeout(() => setSpeech(null), 3200);
+  };
 
   const snap = roadmap.snap;
 
@@ -36,6 +122,9 @@ export default function App() {
   const clearedCount = derived.filter((s) => s.status === 'cleared').length;
   const total = derived.length;
   const pct = total ? (clearedCount / total) * 100 : 0;
+  const walkPct = Math.min(Math.max(pct, 3), 97);
+  // 端に寄った時に吹き出しが画面外に出ないよう、開く向きを変える
+  const bubbleSide = walkPct < 30 ? 'right' : walkPct > 70 ? 'left' : 'center';
   const currentLabel = snap ? labelForStage(snap, snap.appState.current_stage_id) : '-';
 
   // ガード未通過なら入場画面
@@ -126,8 +215,21 @@ export default function App() {
         </div>
 
         <div className="progress-wrap">
-          <div className="progress-walker" style={{ left: `${Math.min(Math.max(pct, 3), 97)}%` }}>
-            <Mascot size={30} />
+          <div className="progress-walker" style={{ left: `${walkPct}%` }}>
+            {speech && (
+              <div className={`speech-bubble ${bubbleSide}`} role="status">
+                {speech}
+              </div>
+            )}
+            <button
+              key={tapCount}
+              type="button"
+              className="walker-btn hopping"
+              onClick={speak}
+              aria-label="いものすけを なでる"
+            >
+              <Mascot size={30} />
+            </button>
           </div>
           <div className="progress-track">
             <div className="progress-fill" style={{ width: `${pct}%` }} />
@@ -136,7 +238,7 @@ export default function App() {
             🏮
           </span>
         </div>
-        <p className="cheer">{cheerMessage(clearedCount, total)}</p>
+        <p className="cheer">{cheerMessage(clearedCount, total, cheerSeed)}</p>
 
         <div className="toolbar">
           <button
