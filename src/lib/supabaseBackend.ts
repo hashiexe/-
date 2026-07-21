@@ -9,30 +9,42 @@ import type { StageEdit } from './mutations';
 export class SupabaseBackend implements Backend {
   readonly isCloud = true;
   private db: SupabaseClient;
+  private seedAttempted = false;
 
   constructor(db: SupabaseClient) {
     this.db = db;
   }
 
   async load(): Promise<Snapshot> {
-    const [{ data: worlds }, { data: stages }, { data: logs }, { data: appRows }] = await Promise.all([
+    const [wRes, sRes, lRes, aRes] = await Promise.all([
       this.db.from('worlds').select('*').order('order', { ascending: true }),
       this.db.from('stages').select('*').order('order', { ascending: true }),
       this.db.from('activity_logs').select('*').order('created_at', { ascending: false }).limit(200),
       this.db.from('app_state').select('*').limit(1),
     ]);
 
-    // 未投入なら初期38ステージをシード（best-effort）
-    if (!worlds || worlds.length === 0) {
+    // 接続・権限（RLS）・スキーマ未作成などのエラーは明示的に投げる（無限ループ防止）
+    if (wRes.error) {
+      throw new Error(
+        `Supabase に接続できませんでした（${wRes.error.message}）。` +
+          'URL / anon キーの設定、および supabase/schema.sql の実行を確認してください。',
+      );
+    }
+
+    const worlds = (wRes.data ?? []) as World[];
+
+    // 空なら一度だけ初期38ステージをシードして読み直す。失敗しても再帰しない。
+    if (worlds.length === 0 && !this.seedAttempted) {
+      this.seedAttempted = true;
       await this.seed();
       return this.load();
     }
 
     return {
-      worlds: (worlds ?? []) as World[],
-      stages: (stages ?? []) as Stage[],
-      logs: (logs ?? []) as ActivityLog[],
-      appState: { current_stage_id: appRows?.[0]?.current_stage_id ?? null },
+      worlds,
+      stages: (sRes.data ?? []) as Stage[],
+      logs: (lRes.data ?? []) as ActivityLog[],
+      appState: { current_stage_id: aRes.data?.[0]?.current_stage_id ?? null },
     };
   }
 

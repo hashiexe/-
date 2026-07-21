@@ -8,6 +8,7 @@ import type { StageEdit } from '../lib/mutations';
 export interface Roadmap {
   snap: Snapshot | null;
   loading: boolean;
+  error: string | null;
   isCloud: boolean;
   toggleStatus: (stageId: string) => Promise<Stage | undefined>;
   editStage: (stageId: string, edit: StageEdit) => Promise<void>;
@@ -22,6 +23,7 @@ export function useRoadmap(actor: Actor | null): Roadmap {
   const backend = getBackend();
   const [snap, setSnap] = useState<Snapshot | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const snapRef = useRef<Snapshot | null>(null);
   snapRef.current = snap;
 
@@ -29,10 +31,23 @@ export function useRoadmap(actor: Actor | null): Roadmap {
     let alive = true;
     backend
       .load()
-      .then((s) => alive && setSnap(s))
+      .then((s) => {
+        if (alive) {
+          setSnap(s);
+          setError(null);
+        }
+      })
+      .catch((e: unknown) => {
+        if (alive) setError(e instanceof Error ? e.message : String(e));
+      })
       .finally(() => alive && setLoading(false));
     const unsub = backend.subscribe(() => {
-      backend.load().then((s) => alive && setSnap(s));
+      backend
+        .load()
+        .then((s) => alive && setSnap(s))
+        .catch(() => {
+          /* 一時的な購読エラーは無視（次の変更で再取得される） */
+        });
     });
     return () => {
       alive = false;
@@ -99,6 +114,7 @@ export function useRoadmap(actor: Actor | null): Roadmap {
   return {
     snap,
     loading,
+    error,
     isCloud: backend.isCloud,
     toggleStatus,
     editStage,

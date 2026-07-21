@@ -30,6 +30,24 @@ export default function App() {
     return <Gate gate={gate} />;
   }
 
+  if (roadmap.error) {
+    return (
+      <div className="gate">
+        <div className="gate-card">
+          <Mascot className="badge-mascot" size={72} />
+          <h1>あれれ…</h1>
+          <p style={{ marginBottom: 10 }}>クラウドにつながりませんでした。</p>
+          <p className="gate-error" style={{ whiteSpace: 'normal', textAlign: 'left' }}>
+            {roadmap.error}
+          </p>
+          <button className="btn btn-primary" onClick={() => location.reload()} style={{ marginTop: 12 }}>
+            もう一度ためす
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!snap) {
     return (
       <div className="gate">
