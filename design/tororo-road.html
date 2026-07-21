@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>とろりロード</title>
+<style>
+  @font-face {
+    font-family: 'system-round';
+    src: local('Hiragino Maru Gothic ProN');
+  }
+  :root{
+    --cream:#FBF3E3;
+    --paper:#F3E7CC;
+    --skin:#5B3A56;
+    --flesh:#E8823C;
+    --flesh-dark:#C86A2E;
+    --leaf:#5C8A4A;
+    --leaf-dark:#3F6633;
+    --ink:#3D2B24;
+    --gold:#F2C14E;
+    --gold-dark:#C99A2E;
+    --locked:#C9BFA9;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top, #FFFDF7 0%, var(--cream) 55%, #EFE0BE 100%);
+    font-family: "Hiragino Maru Gothic ProN", "Yuji Syuku", "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    text-align:center;
+    padding:38px 20px 18px;
+    position:relative;
+  }
+  .badge-mascot{
+    width:64px;height:64px;
+    margin:0 auto 6px;
+    background:var(--flesh);
+    border-radius:50% 50% 45% 45%;
+    position:relative;
+    box-shadow:inset -6px -8px 0 rgba(0,0,0,0.12);
+    animation:bob 2.4s ease-in-out infinite;
+  }
+  .badge-mascot::before{
+    content:"";
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    width:20px;height:22px;background:var(--leaf);
+    border-radius:0 100% 0 100%;
+  }
+  .badge-mascot::after{
+    content:"๑˃̵ᴗ˂̵๑";
+    position:absolute; top:22px; left:0; right:0;
+    text-align:center; font-size:11px; color:var(--ink); opacity:0.75;
+  }
+  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
+
+  h1{
+    font-size:30px; letter-spacing:.08em; margin:0;
+    color:var(--skin);
+    text-shadow: 2px 2px 0 var(--gold);
+  }
+  header p{
+    margin:8px 0 0; font-size:13px; letter-spacing:.05em; color:#8a6b4f;
+  }
+
+  .stat-strip{
+    display:flex; justify-content:center; gap:10px;
+    margin-top:18px; flex-wrap:wrap; padding:0 16px;
+  }
+  .stat-chip{
+    background:var(--paper); border:2px solid var(--flesh-dark);
+    border-radius:999px; padding:6px 14px; font-size:12px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .stat-chip b{color:var(--flesh-dark); font-size:14px;}
+
+  /* ---------- MAP ---------- */
+  .map-wrap{
+    max-width:480px; margin:24px auto 80px; position:relative; padding:0 24px;
+  }
+  .world-label{
+    display:flex; align-items:center; gap:10px;
+    margin:44px 0 18px; font-size:13px; font-weight:bold; letter-spacing:.1em;
+  }
+  .world-label .num{
+    background:var(--skin); color:var(--cream);
+    width:26px;height:26px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px; flex-shrink:0;
+  }
+  .world-label .line{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--locked) 0 6px, transparent 6px 12px);}
+
+  .path-svg{ position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+
+  .stage{
+    position:relative; z-index:1;
+    display:flex; align-items:center; gap:16px;
+    margin:0 0 34px;
+  }
+  .stage.right{ flex-direction:row-reverse; text-align:right; }
+
+  .node{
+    width:78px; height:78px; border-radius:50%;
+    flex-shrink:0; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+    border:4px solid var(--flesh-dark);
+    background: radial-gradient(circle at 35% 30%, #FFD98A, var(--flesh) 60%, var(--flesh-dark));
+    box-shadow: 0 6px 0 var(--flesh-dark), 0 8px 10px rgba(0,0,0,0.15);
+    cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .node:active{ transform:translateY(4px); box-shadow:0 2px 0 var(--flesh-dark);}
+
+  .node.cleared{
+    background: radial-gradient(circle at 35% 30%, #FFF3B0, var(--gold) 55%, var(--gold-dark));
+    border-color:var(--gold-dark);
+    box-shadow: 0 6px 0 var(--gold-dark), 0 8px 14px rgba(242,193,78,0.45);
+  }
+  .node.locked{
+    background: var(--locked);
+    border-color:#a89d84;
+    box-shadow:0 6px 0 #a89d84;
+    cursor:default; filter:grayscale(0.4);
+  }
+  .node.current{ animation:pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 6px 0 var(--flesh-dark), 0 0 0 0 rgba(232,130,60,0.5);}
+    50%{ box-shadow:0 6px 0 var(--flesh-dark), 0 0 0 12px rgba(232,130,60,0);}
+  }
+
+  .mascot-marker{
+    position:absolute; top:-38px; left:50%; transform:translateX(-50%);
+    font-size:26px; animation:bob 1.4s ease-in-out infinite;
+  }
+
+  .stage-info{ flex:1; }
+  .stage-tag{
+    font-size:11px; color:var(--flesh-dark); font-weight:bold; letter-spacing:.08em;
+  }
+  .stage-title{ font-size:15px; font-weight:bold; margin:2px 0 4px; }
+  .stage-goal{
+    font-size:12px; color:#8a6b4f; background:#fff8ea;
+    display:inline-block; padding:3px 9px; border-radius:6px; border:1px dashed var(--locked);
+  }
+  .node.locked + .stage-info .stage-title,
+  .node.locked + .stage-info .stage-goal{ color:#a89d84; border-color:#d8cfba; }
+
+  .check{
+    position:absolute; top:-10px; right:-8px;
+    background:var(--leaf); color:#fff; font-size:12px;
+    width:26px;height:26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--cream);
+  }
+
+  /* castle goal */
+  .castle{
+    text-align:center; margin-top:10px;
+  }
+  .castle .node{ width:96px;height:96px; font-size:38px; margin:0 auto; }
+
+  /* ---------- OVERLAY ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(61,43,36,0.55);
+    display:none; align-items:center; justify-content:center; z-index:50;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.show{ display:flex; }
+  .clear-card{
+    background:var(--cream); border:4px solid var(--gold-dark);
+    border-radius:20px; padding:32px 28px; text-align:center;
+    width:280px; position:relative; overflow:hidden;
+    animation:pop .35s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop{ 0%{transform:scale(.6); opacity:0;} 100%{transform:scale(1); opacity:1;} }
+  .clear-card h2{ color:var(--flesh-dark); font-size:22px; margin:6px 0 4px; letter-spacing:.05em;}
+  .clear-card p{ font-size:13px; color:#8a6b4f; margin:0 0 18px; }
+  .clear-card button{
+    background:var(--flesh); color:#fff; border:none; border-radius:999px;
+    padding:10px 22px; font-size:14px; font-weight:bold; cursor:pointer;
+    box-shadow:0 4px 0 var(--flesh-dark);
+  }
+  .clear-card button:active{ transform:translateY(4px); box-shadow:none; }
+  .confetti{
+    position:absolute; width:8px;height:8px; top:-10px; opacity:0.9;
+    animation: fall linear forwards;
+  }
+  @keyframes fall{ to{ transform:translateY(340px) rotate(340deg); opacity:0;} }
+
+  footer{
+    text-align:center; font-size:11px; color:#a1876b; padding-bottom:30px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge-mascot"></div>
+  <h1>とろりロード</h1>
+  <p>おいも屋 とろり 開業ロードマップ</p>
+  <div class="stat-strip">
+    <div class="stat-chip">クリア <b id="clearedCount">2</b> / 8</div>
+    <div class="stat-chip">現在地 <b id="currentLabel">2-1</b></div>
+  </div>
+</header>
+
+<div class="map-wrap" id="mapWrap">
+
+  <div class="world-label"><span class="num">1</span>生産体制をつくる<span class="line"></span></div>
+
+  <div class="stage" data-id="1-1">
+    <div class="node cleared">🍠<div class="check">✓</div></div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 1-1</div>
+      <div class="stage-title">生産ライン強化</div>
+      <div class="stage-goal">1日の生産量 80本 達成</div>
+    </div>
+  </div>
+
+  <div class="stage right" data-id="1-2">
+    <div class="node cleared">💰<div class="check">✓</div></div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 1-2</div>
+      <div class="stage-title">出店で黒字化</div>
+      <div class="stage-goal">1出店で販売80本・利益10,000円</div>
+    </div>
+  </div>
+
+  <div class="world-label"><span class="num">2</span>認知を広げる<span class="line"></span></div>
+
+  <div class="stage current" data-id="2-1">
+    <div class="node current">☕<div class="mascot-marker">🍠</div></div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 2-1</div>
+      <div class="stage-title">セット販売を定着</div>
+      <div class="stage-goal">マリアージュセット比率 5人に1人</div>
+    </div>
+  </div>
+
+  <div class="stage right locked-stage" data-id="2-2">
+    <div class="node locked">🏕️</div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 2-2</div>
+      <div class="stage-title">定期出店を確立</div>
+      <div class="stage-goal">イケ・サンパーク等で月4回出店</div>
+    </div>
+  </div>
+
+  <div class="world-label"><span class="num">3</span>販路を広げる (EC)<span class="line"></span></div>
+
+  <div class="stage locked-stage" data-id="3-1">
+    <div class="node locked">🧊</div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 3-1</div>
+      <div class="stage-title">冷凍焼き芋EC公開</div>
+      <div class="stage-goal">自社ECサイト リリース</div>
+    </div>
+  </div>
+
+  <div class="stage right locked-stage" data-id="3-2">
+    <div class="node locked">📦</div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 3-2</div>
+      <div class="stage-title">EC販売を軌道に乗せる</div>
+      <div class="stage-goal">月間販売目標を達成</div>
+    </div>
+  </div>
+
+  <div class="world-label"><span class="num">4</span>実店舗オープン<span class="line"></span></div>
+
+  <div class="stage locked-stage" data-id="4-1">
+    <div class="node locked">📋</div>
+    <div class="stage-info">
+      <div class="stage-tag">STAGE 4-1</div>
+      <div class="stage-title">出店データで事業計画確定</div>
+      <div class="stage-goal">実店舗の収支計画をFIX</div>
+    </div>
+  </div>
+
+  <div class="castle locked-stage" data-id="4-2">
+    <div class="node locked">🏮</div>
+    <div class="stage-title" style="margin-top:8px;">GOAL：実店舗オープン</div>
+  </div>
+
+</div>
+
+<footer>これはイメージ見本です。実データはClaude Codeで作るアプリに反映します。</footer>
+
+<div class="overlay" id="overlay">
+  <div class="clear-card" id="clearCard">
+    <div style="font-size:34px;">🎉</div>
+    <h2 id="clearTitle">STAGE 2-1 クリア!</h2>
+    <p id="clearDesc">マリアージュセット比率 5人に1人 達成</p>
+    <button onclick="closeOverlay()">つぎへすすむ</button>
+  </div>
+</div>
+
+<script>
+// タップでクリア演出を確認できるデモ（現在地ステージのみ反応）
+document.querySelectorAll('.stage.current .node').forEach(n=>{
+  n.addEventListener('click', ()=>{
+    showClear('STAGE 2-1 クリア!', 'マリアージュセット比率 5人に1人 達成');
+  });
+});
+document.querySelectorAll('.node.cleared').forEach(n=>{
+  n.addEventListener('click', ()=>{
+    const stage = n.closest('.stage');
+    const title = stage.querySelector('.stage-title').textContent;
+    const goal = stage.querySelector('.stage-goal').textContent;
+    showClear('クリア済み: ' + title, goal);
+  });
+});
+
+function showClear(title, desc){
+  document.getElementById('clearTitle').textContent = title;
+  document.getElementById('clearDesc').textContent = desc;
+  const overlay = document.getElementById('overlay');
+  overlay.classList.add('show');
+  spawnConfetti();
+}
+function closeOverlay(){
+  document.getElementById('overlay').classList.remove('show');
+}
+function spawnConfetti(){
+  const card = document.getElementById('clearCard');
+  const colors = ['#E8823C','#F2C14E','#5C8A4A','#5B3A56'];
+  for(let i=0;i<26;i++){
+    const c = document.createElement('div');
+    c.className='confetti';
+    c.style.left = Math.random()*100+'%';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (0.9+Math.random()*0.8)+'s';
+    c.style.borderRadius = Math.random()>0.5 ? '50%':'2px';
+    card.appendChild(c);
+    setTimeout(()=>c.remove(), 1800);
+  }
+}
+</script>
+</body>
+</html>

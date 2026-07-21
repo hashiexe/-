@@ -1,122 +1,138 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useMemo, useState } from 'react';
+import { useGate } from './hooks/useGate';
+import { useRoadmap } from './hooks/useRoadmap';
+import { deriveStages, labelForStage, sortedWorlds } from './lib/labels';
+import type { StageEdit } from './lib/mutations';
+import { Gate } from './components/Gate';
+import { WorldMap } from './components/WorldMap';
+import { StageDetail } from './components/StageDetail';
+import { Celebration, type CelebrationData } from './components/Celebration';
+import { ActivityLogPanel } from './components/ActivityLogPanel';
+import { Mascot } from './components/Mascot';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const gate = useGate();
+  const roadmap = useRoadmap(gate.actor);
+  const [openStageId, setOpenStageId] = useState<string | null>(null);
+  const [celebration, setCelebration] = useState<CelebrationData | null>(null);
+  const [showLog, setShowLog] = useState(false);
+  const [reorderMode, setReorderMode] = useState(false);
+
+  const snap = roadmap.snap;
+
+  const derived = useMemo(() => (snap ? deriveStages(snap) : []), [snap]);
+  const clearedCount = derived.filter((s) => s.status === 'cleared').length;
+  const total = derived.length;
+  const currentLabel = snap ? labelForStage(snap, snap.appState.current_stage_id) : '-';
+
+  // ガード未通過なら入場画面
+  if (!gate.unlocked || !gate.actor) {
+    return <Gate gate={gate} />;
+  }
+
+  if (!snap) {
+    return (
+      <div className="gate">
+        <div className="gate-card">
+          <Mascot className="badge-mascot" size={72} />
+          <p>よみこみ中…</p>
+        </div>
+      </div>
+    );
+  }
+
+  const openStage = openStageId ? derived.find((s) => s.id === openStageId) ?? null : null;
+  const worlds = sortedWorlds(snap);
+
+  const celebrateIfCleared = async (stageId: string) => {
+    const clearedStage = await roadmap.toggleStatus(stageId);
+    if (clearedStage) {
+      const d = derived.find((s) => s.id === stageId);
+      setCelebration({
+        label: d?.label ?? '',
+        title: clearedStage.title,
+        goal: clearedStage.goal,
+      });
+    }
+  };
+
+  const handleSave = (stageId: string, edit: StageEdit) => {
+    void roadmap.editStage(stageId, edit);
+  };
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+      <header className="app-header">
+        <div className="header-actor">
+          <span className="who">{gate.actor}</span>
+          <button className="link-btn" onClick={gate.signOut}>
+            ぬける
+          </button>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        <Mascot className="badge-mascot" size={64} />
+        <h1>とろりロード</h1>
+        <p className="tagline">おいも屋 とろり 開業ロードマップ</p>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="stat-strip">
+          <div className="stat-chip">
+            クリア <b>{clearedCount}</b> / {total}
+          </div>
+          <div className="stat-chip">
+            現在地 <b>{currentLabel}</b>
+          </div>
+          {roadmap.isCloud && <div className="stat-chip">☁️ 同期中</div>}
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="progress-track">
+          <div
+            className="progress-fill"
+            style={{ width: total ? `${(clearedCount / total) * 100}%` : '0%' }}
+          />
         </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+        <div className="toolbar">
+          <button
+            className={`pill ${reorderMode ? 'active' : ''}`}
+            onClick={() => setReorderMode((v) => !v)}
+          >
+            {reorderMode ? '✓ 並び替え中' : '↕ 並び替え'}
+          </button>
+          <button className="pill" onClick={() => setShowLog(true)}>
+            📜 記録
+          </button>
+        </div>
+      </header>
+
+      <WorldMap
+        snap={snap}
+        reorderMode={reorderMode}
+        onOpenStage={(id) => setOpenStageId(id)}
+        onQuickClear={(id) => void celebrateIfCleared(id)}
+        onAddStage={(worldId) => void roadmap.addStage(worldId)}
+        onRenameWorld={(worldId, name) => void roadmap.renameWorld(worldId, name)}
+        onReorder={(arr, movedId) => void roadmap.reorder(arr, movedId)}
+      />
+
+      <p className="footer-note">ふたりで こつこつ、とろりのお店まで。🍠</p>
+
+      {openStage && (
+        <StageDetail
+          stage={openStage}
+          worlds={worlds}
+          isCurrent={snap.appState.current_stage_id === openStage.id}
+          onToggleStatus={() => {
+            void celebrateIfCleared(openStage.id);
+            setOpenStageId(null);
+          }}
+          onSave={(edit) => handleSave(openStage.id, edit)}
+          onDelete={() => void roadmap.deleteStage(openStage.id)}
+          onSetMarker={(on) => void roadmap.setMarker(on ? openStage.id : null)}
+          onClose={() => setOpenStageId(null)}
+        />
+      )}
+
+      <Celebration data={celebration} onClose={() => setCelebration(null)} />
+
+      {showLog && <ActivityLogPanel logs={snap.logs} onClose={() => setShowLog(false)} />}
     </>
-  )
+  );
 }
-
-export default App
