@@ -34,7 +34,7 @@ export const StageNode = forwardRef<HTMLDivElement, Props>(function StageNode(
   return (
     <div
       ref={ref}
-      className={`stage ${side} ${dragging ? 'dragging' : ''}`}
+      className={`stage ${isGoal ? 'goal-row' : side} ${dragging ? 'dragging' : ''}`}
       {...(reorderMode ? handleProps : {})}
     >
       <div
@@ -53,7 +53,7 @@ export const StageNode = forwardRef<HTMLDivElement, Props>(function StageNode(
         <div className="stage-tag">{isGoal ? '🏮 GOAL' : `STAGE ${stage.label}`}</div>
         <div className="stage-title">{stage.title}</div>
         {stage.goal && <span className="stage-goal">{stage.goal}</span>}
-        {!reorderMode && !isGoal && (
+        {!reorderMode && (
           <div style={{ marginTop: 6 }}>
             <button className="link-btn" onClick={onQuickClear}>
               {cleared ? '↺ 未達成にもどす' : '✓ クリアにする'}

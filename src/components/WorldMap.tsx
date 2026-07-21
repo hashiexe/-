@@ -35,6 +35,9 @@ interface Props {
 
 type Items = Record<string, string[]>;
 
+// ワールドを象徴する絵文字（表示順 index に対応。6つ目以降は循環）
+const WORLD_EMOJI = ['🍠', '💰', '☕', '📦', '🏮'];
+
 function buildItems(snap: Snapshot): Items {
   const items: Items = {};
   for (const w of sortedWorlds(snap)) {
@@ -133,9 +136,6 @@ export function WorldMap({
 
   const activeStage = activeId ? stageById.get(activeId) : null;
 
-  // グローバル通し番号で左右交互に配置（見本のジグザグを踏襲）
-  let globalIndex = -1;
-
   return (
     <DndContext
       sensors={sensors}
@@ -146,38 +146,45 @@ export function WorldMap({
       onDragCancel={() => setActiveId(null)}
     >
       <div className="map-wrap">
-        {worlds.map((w, wi) => (
-          <WorldBlock
-            key={w.id}
-            worldId={w.id}
-            index={wi}
-            name={w.name}
-            stageIds={items[w.id] ?? []}
-            onAddStage={() => onAddStage(w.id)}
-            onRenameWorld={(name) => onRenameWorld(w.id, name)}
-          >
-            {(items[w.id] ?? []).map((sid, si) => {
-              const st = stageById.get(sid);
-              if (!st) return null;
-              globalIndex += 1;
-              const side = globalIndex % 2 === 0 ? 'left' : 'right';
-              const label = st.kind === 'goal' ? 'GOAL' : `${wi + 1}-${si + 1}`;
-              return (
-                <SortableStage
-                  key={sid}
-                  id={sid}
-                  side={side}
-                  reorderMode={reorderMode}
-                  isCurrent={snap.appState.current_stage_id === sid}
-                  stage={{ ...st, label, worldIndex: wi, stageIndex: si }}
-                  hidden={activeId === sid}
-                  onOpen={() => onOpenStage(sid)}
-                  onQuickClear={() => onQuickClear(sid)}
-                />
-              );
-            })}
-          </WorldBlock>
-        ))}
+        {worlds.map((w, wi) => {
+          const ids = items[w.id] ?? [];
+          const clearedInWorld = ids.filter((id) => stageById.get(id)?.status === 'cleared').length;
+          return (
+            <WorldBlock
+              key={w.id}
+              worldId={w.id}
+              index={wi}
+              name={w.name}
+              emoji={WORLD_EMOJI[wi % WORLD_EMOJI.length]}
+              cleared={clearedInWorld}
+              total={ids.length}
+              stageIds={ids}
+              onAddStage={() => onAddStage(w.id)}
+              onRenameWorld={(name) => onRenameWorld(w.id, name)}
+            >
+              {ids.map((sid, si) => {
+                const st = stageById.get(sid);
+                if (!st) return null;
+                // 各ワールド内で左右交互に配置（毎ワールド左始まり）
+                const side = si % 2 === 0 ? 'left' : 'right';
+                const label = st.kind === 'goal' ? 'GOAL' : `${wi + 1}-${si + 1}`;
+                return (
+                  <SortableStage
+                    key={sid}
+                    id={sid}
+                    side={side}
+                    reorderMode={reorderMode}
+                    isCurrent={snap.appState.current_stage_id === sid}
+                    stage={{ ...st, label, worldIndex: wi, stageIndex: si }}
+                    hidden={activeId === sid}
+                    onOpen={() => onOpenStage(sid)}
+                    onQuickClear={() => onQuickClear(sid)}
+                  />
+                );
+              })}
+            </WorldBlock>
+          );
+        })}
       </div>
 
       <DragOverlay>
@@ -191,23 +198,40 @@ export function WorldMap({
   );
 }
 
-// ---- ワールドの1ブロック（ドロップ先） ----
+// ---- ワールドの1ブロック（色分けカード・ドロップ先） ----
 interface BlockProps {
   worldId: string;
   index: number;
   name: string;
+  emoji: string;
+  cleared: number;
+  total: number;
   stageIds: string[];
   onAddStage: () => void;
   onRenameWorld: (name: string) => void;
   children: React.ReactNode;
 }
 
-function WorldBlock({ worldId, index, name, stageIds, onAddStage, onRenameWorld, children }: BlockProps) {
+function WorldBlock({
+  worldId,
+  index,
+  name,
+  emoji,
+  cleared,
+  total,
+  stageIds,
+  onAddStage,
+  onRenameWorld,
+  children,
+}: BlockProps) {
   const { setNodeRef } = useDroppable({ id: worldId });
   return (
-    <div className="world-block">
-      <div className="world-label">
+    <div className="world-card" data-accent={index % 5}>
+      <div className="world-banner">
         <span className="num">{index + 1}</span>
+        <span className="w-emoji" aria-hidden>
+          {emoji}
+        </span>
         <input
           className="wname"
           defaultValue={name}
@@ -222,13 +246,17 @@ function WorldBlock({ worldId, index, name, stageIds, onAddStage, onRenameWorld,
           }}
           aria-label="ワールド名"
         />
-        <span className="line" />
+        <span className="world-progress">
+          {cleared}/{total}
+        </span>
         <button className="add-stage" onClick={onAddStage} title="ステージを追加" aria-label="ステージを追加">
           ＋
         </button>
       </div>
       <SortableContext id={worldId} items={stageIds} strategy={verticalListSortingStrategy}>
-        <div ref={setNodeRef}>{children}</div>
+        <div ref={setNodeRef} className="world-body">
+          {children}
+        </div>
       </SortableContext>
     </div>
   );

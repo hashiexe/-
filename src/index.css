@@ -1,4 +1,4 @@
-/* とろりロード — グローバルスタイル（design/tororo-road.html を踏襲） */
+/* とろりロード — グローバルスタイル（design/tororo-road.html を踏襲しつつワールド別に色分け） */
 :root {
   --cream: #fbf3e3;
   --paper: #f3e7cc;
@@ -12,6 +12,11 @@
   --gold: #f2c14e;
   --gold-dark: #c99a2e;
   --line: #c9bfa9;
+
+  /* ワールドの既定アクセント（カード外の要素向けフォールバック） */
+  --wc: #e8823c;
+  --wc-dark: #c86a2e;
+  --wc-tint: #fdefe0;
 }
 
 * {
@@ -23,8 +28,14 @@ body {
   padding: 0;
 }
 body {
-  background: radial-gradient(ellipse at top, #fffdf7 0%, var(--cream) 55%, #efe0be 100%);
-  background-attachment: fixed;
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle at 50% 0, #fffdf7 0%, rgba(255, 253, 247, 0) 60%),
+    radial-gradient(#efe0be 1.4px, transparent 1.6px),
+    radial-gradient(#efe0be 1.4px, transparent 1.6px);
+  background-size: 100% 520px, 34px 34px, 34px 34px;
+  background-position: 0 0, 0 0, 17px 17px;
+  background-attachment: fixed, fixed, fixed;
   font-family: 'Hiragino Maru Gothic ProN', 'Zen Maru Gothic', 'Yu Gothic', 'Hiragino Sans', sans-serif;
   color: var(--ink);
   min-height: 100vh;
@@ -44,7 +55,7 @@ select {
 /* ---------- HEADER ---------- */
 .app-header {
   text-align: center;
-  padding: 34px 20px 10px;
+  padding: 30px 20px 8px;
   position: relative;
 }
 .header-actor {
@@ -125,8 +136,8 @@ select {
   font-size: 14px;
 }
 .progress-track {
-  width: min(340px, 82vw);
-  height: 10px;
+  width: min(360px, 82vw);
+  height: 12px;
   margin: 14px auto 0;
   background: var(--paper);
   border: 2px solid var(--flesh-dark);
@@ -135,7 +146,7 @@ select {
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--flesh));
+  background: linear-gradient(90deg, var(--leaf), var(--gold) 45%, var(--flesh));
   border-radius: 999px;
   transition: width 0.4s ease;
 }
@@ -162,96 +173,168 @@ select {
 }
 .pill.active {
   border-color: var(--flesh-dark);
-  color: var(--flesh-dark);
+  color: #fff;
+  background: var(--flesh);
   font-weight: bold;
 }
 
-/* ---------- MAP ---------- */
+/* ---------- MAP（ワールドカードのレスポンシブ配置） ---------- */
 .map-wrap {
-  max-width: 480px;
-  margin: 18px auto 90px;
-  position: relative;
-  padding: 0 24px;
+  max-width: 1080px;
+  margin: 22px auto 90px;
+  padding: 0 18px;
+  column-gap: 24px;
 }
-.world-block {
-  position: relative;
+/* PC・タブレットでは2列。ワールド1が長いため3列は隙間が出るので2列で固定 */
+@media (min-width: 800px) {
+  .map-wrap {
+    column-count: 2;
+  }
 }
-.world-label {
+
+.world-card {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 22px;
+  background: var(--wc-tint);
+  border: 2px solid var(--wc);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(61, 43, 36, 0.08);
+}
+
+/* 5つのワールド・アクセント（index%5 で循環） */
+.world-card[data-accent='0'] {
+  --wc: #e8823c;
+  --wc-dark: #c86a2e;
+  --wc-tint: #fdefe1;
+}
+.world-card[data-accent='1'] {
+  --wc: #d15f43;
+  --wc-dark: #a8462f;
+  --wc-tint: #fbe8e1;
+}
+.world-card[data-accent='2'] {
+  --wc: #a9713f;
+  --wc-dark: #82562d;
+  --wc-tint: #f4e8d8;
+}
+.world-card[data-accent='3'] {
+  --wc: #5c8a4a;
+  --wc-dark: #3f6633;
+  --wc-tint: #e9f1df;
+}
+.world-card[data-accent='4'] {
+  --wc: #7a5170;
+  --wc-dark: #5b3a56;
+  --wc-tint: #f1e7ef;
+}
+
+.world-banner {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 40px 0 18px;
-  font-size: 13px;
-  font-weight: bold;
-  letter-spacing: 0.1em;
+  gap: 9px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, var(--wc), var(--wc-dark));
+  color: #fff;
 }
-.world-label .num {
-  background: var(--skin);
-  color: var(--cream);
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
+.world-banner .num {
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: bold;
   flex-shrink: 0;
 }
-.world-label .wname {
-  background: none;
-  border: none;
-  font: inherit;
-  color: var(--ink);
-  padding: 2px 4px;
-  border-radius: 6px;
-  min-width: 40px;
-  max-width: 58%;
+.world-banner .w-emoji {
+  font-size: 22px;
+  flex-shrink: 0;
 }
-.world-label .wname:focus {
-  outline: 2px dashed var(--flesh);
-  background: #fff8ea;
-}
-.world-label .line {
+.world-banner .wname {
   flex: 1;
-  height: 2px;
-  background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px);
-}
-.world-label .add-stage {
-  background: var(--leaf);
-  color: #fff;
+  min-width: 0;
+  background: transparent;
   border: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  font-size: 16px;
-  line-height: 1;
-  box-shadow: 0 3px 0 var(--leaf-dark);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 3px 4px;
+  border-radius: 6px;
+  text-overflow: ellipsis;
+}
+.world-banner .wname::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+.world-banner .wname:focus {
+  outline: 2px dashed rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.16);
+}
+.world-progress {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--wc-dark);
+  font-weight: bold;
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 3px 10px;
   flex-shrink: 0;
 }
-.world-label .add-stage:active {
-  transform: translateY(3px);
+.world-banner .add-stage {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--wc-dark);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+.world-banner .add-stage:active {
+  transform: translateY(2px);
   box-shadow: none;
 }
+.world-body {
+  padding: 20px 18px 6px;
+  position: relative;
+}
 
+/* ---------- STAGE ---------- */
 .stage {
   position: relative;
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin: 0 0 30px;
+  gap: 15px;
+  margin: 0 0 26px;
 }
 .stage.right {
   flex-direction: row-reverse;
   text-align: right;
+}
+.stage.goal-row {
+  flex-direction: column;
+  text-align: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 2px dashed var(--wc);
 }
 .stage.dragging {
   opacity: 0.4;
 }
 
 .node {
-  width: 78px;
-  height: 78px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   flex-shrink: 0;
   position: relative;
@@ -259,16 +342,16 @@ select {
   align-items: center;
   justify-content: center;
   font-size: 26px;
-  border: 4px solid var(--flesh-dark);
-  background: radial-gradient(circle at 35% 30%, #ffd98a, var(--flesh) 60%, var(--flesh-dark));
-  box-shadow: 0 6px 0 var(--flesh-dark), 0 8px 10px rgba(0, 0, 0, 0.15);
+  border: 4px solid var(--wc-dark);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 248, 235, 0.92), var(--wc) 60%, var(--wc-dark));
+  box-shadow: 0 6px 0 var(--wc-dark), 0 8px 10px rgba(0, 0, 0, 0.15);
   transition: transform 0.15s ease;
   user-select: none;
   touch-action: manipulation;
 }
 .node:active {
   transform: translateY(4px);
-  box-shadow: 0 2px 0 var(--flesh-dark);
+  box-shadow: 0 2px 0 var(--wc-dark);
 }
 .node.cleared {
   background: radial-gradient(circle at 35% 30%, #fff3b0, var(--gold) 55%, var(--gold-dark));
@@ -276,9 +359,13 @@ select {
   box-shadow: 0 6px 0 var(--gold-dark), 0 8px 14px rgba(242, 193, 78, 0.45);
 }
 .node.goal {
-  width: 96px;
-  height: 96px;
-  font-size: 40px;
+  width: 104px;
+  height: 104px;
+  font-size: 44px;
+  border-width: 5px;
+}
+.node.goal.cleared {
+  box-shadow: 0 6px 0 var(--gold-dark), 0 0 26px rgba(242, 193, 78, 0.7);
 }
 .node.current {
   animation: pulse 1.6s ease-in-out infinite;
@@ -286,10 +373,10 @@ select {
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 6px 0 var(--flesh-dark), 0 0 0 0 rgba(232, 130, 60, 0.5);
+    box-shadow: 0 6px 0 var(--wc-dark), 0 0 0 0 rgba(232, 130, 60, 0.5);
   }
   50% {
-    box-shadow: 0 6px 0 var(--flesh-dark), 0 0 0 12px rgba(232, 130, 60, 0);
+    box-shadow: 0 6px 0 var(--wc-dark), 0 0 0 12px rgba(232, 130, 60, 0);
   }
 }
 .node.current.cleared {
@@ -317,7 +404,8 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid var(--cream);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 .mascot-marker {
   position: absolute;
@@ -334,9 +422,9 @@ select {
   bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--paper);
-  border: 2px solid var(--line);
-  color: var(--muted);
+  background: #fff;
+  border: 2px solid var(--wc);
+  color: var(--wc-dark);
   border-radius: 999px;
   font-size: 10px;
   padding: 0 8px;
@@ -345,6 +433,7 @@ select {
   cursor: grab;
   touch-action: none;
   z-index: 3;
+  white-space: nowrap;
 }
 
 .stage-info {
@@ -353,7 +442,7 @@ select {
 }
 .stage-tag {
   font-size: 11px;
-  color: var(--flesh-dark);
+  color: var(--wc-dark);
   font-weight: bold;
   letter-spacing: 0.08em;
 }
@@ -361,16 +450,21 @@ select {
   font-size: 15px;
   font-weight: bold;
   margin: 2px 0 4px;
+  color: var(--ink);
 }
 .stage-goal {
   font-size: 12px;
   color: var(--muted);
-  background: #fff8ea;
+  background: rgba(255, 255, 255, 0.75);
   display: inline-block;
   padding: 3px 9px;
   border-radius: 6px;
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--wc);
   max-width: 100%;
+}
+.stage .link-btn {
+  color: var(--wc-dark);
+  font-weight: bold;
 }
 
 /* ---------- MODAL / SHEET ---------- */
@@ -390,7 +484,7 @@ select {
   border: 4px solid var(--flesh-dark);
   border-radius: 22px;
   padding: 22px 20px 20px;
-  width: 340px;
+  width: 360px;
   max-width: 100%;
   max-height: 88vh;
   overflow-y: auto;
@@ -540,7 +634,7 @@ select {
   border-radius: 20px;
   padding: 30px 26px;
   text-align: center;
-  width: 280px;
+  width: 300px;
   max-width: 100%;
   position: relative;
   animation: pop 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
@@ -566,7 +660,7 @@ select {
   right: 0;
   bottom: 0;
   top: 0;
-  width: min(320px, 86vw);
+  width: min(340px, 88vw);
   background: var(--cream);
   border-left: 4px solid var(--flesh-dark);
   z-index: 40;
@@ -603,21 +697,6 @@ select {
 .log-empty {
   font-size: 12px;
   color: var(--muted);
-}
-
-/* floating log button */
-.fab {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 30;
-  background: var(--skin);
-  color: var(--cream);
-  border: none;
-  border-radius: 999px;
-  padding: 10px 16px;
-  font-size: 13px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* ---------- GATE ---------- */
