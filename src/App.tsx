@@ -10,10 +10,11 @@ import { Celebration, type CelebrationData } from './components/Celebration';
 import { ActivityLogPanel } from './components/ActivityLogPanel';
 import { Mascot } from './components/Mascot';
 
+const rand = <T,>(a: T[]): T => a[Math.floor(Math.random() * a.length)];
+
 // いものすけをなでた時のひとこと（ゆるっと可愛い雰囲気）
-const IMONO_LINES = [
+const IMONO_BASE = [
   'おなかすいたよぉ',
-  'たいようで ねむくなっちゃう…',
   'おいしく やいてね♪',
   'ほくほくに なりたいな',
   'むらさきのかわ、じまんなんだ',
@@ -29,6 +30,57 @@ const IMONO_LINES = [
   'おいもは しあわせの あじ',
   'えへへ、くすぐったい',
 ];
+const IMONO_MORNING = ['おはよ〜 きょうも やこっか？', 'あさひが きもちいい☀️', 'ねぼけちゃった…', 'けさも ほかほか♪'];
+const IMONO_DAY = ['おひるだ〜 おなかすいた', 'たいようで ねむくなっちゃう…', 'ぽかぽか おひるね したい', 'いい てんきだね〜'];
+const IMONO_EVENING = ['ゆうやけ きれいだね', 'そろそろ やきいも びより', 'よるごはん なにかな〜', 'きょうも おつかれさま'];
+const IMONO_NIGHT = ['もう よる？ ねむむ…', 'おほしさま みえるかな', 'こっそり つまみぐい…', 'おやすみまえの ひとなで♪'];
+const IMONO_RARE = [
+  'じつは… とろりが だいすき💜',
+  'ないしょだよ？ まほう つかえるんだ✨',
+  'きょうは いいこと あるよ、たぶん',
+  'レアな いものすけ だよ！🌟',
+  'ほんとは くすぐったいの、へいき',
+];
+const IMONO_REPEAT = ['またなでるの〜？ ふふ', 'くすぐったいってば😳', 'うれしいけど てれちゃう…', 'なんかい なでても すきだよ♪'];
+const IMONO_MILESTONE = ['たくさん なでてくれて うれしい！🥰', 'こんなに なでられたの はじめて✨', 'もう ともだちだね♪', 'なでなで だいすき〜💜'];
+
+function timePool(): string[] {
+  const h = new Date().getHours();
+  if (h < 5 || h >= 22) return IMONO_NIGHT;
+  if (h < 10) return IMONO_MORNING;
+  if (h < 17) return IMONO_DAY;
+  return IMONO_EVENING;
+}
+
+// なでた回数・連打・時間帯・レアを加味して1つ選ぶ（直前と重複回避）
+function pickImonoLine(petCount: number, isRepeat: boolean, prev: string | null): string {
+  const pool = (() => {
+    if (isRepeat && Math.random() < 0.6) return IMONO_REPEAT;
+    if (petCount > 0 && petCount % 10 === 0) return IMONO_MILESTONE;
+    if (Math.random() < 0.08) return IMONO_RARE;
+    if (Math.random() < 0.4) return timePool();
+    return IMONO_BASE;
+  })();
+  let line = rand(pool);
+  let guard = 0;
+  while (line === prev && pool.length > 1 && guard++ < 6) line = rand(pool);
+  return line;
+}
+
+// クリア時にいものすけが喜ぶセリフ＆動き
+const CELEBRATE_LINES = [
+  'やったー！🎉',
+  'すごいすごい！',
+  'いっしょに よろこぶよ〜',
+  'うれしいなぁ♪',
+  'えらすぎるっ✨',
+  'とろりに 1ぽ ちかづいた！',
+  'ぱちぱち👏',
+  'この ちょうし〜！',
+  'おいしく できたね♪',
+  'ふたりで つかんだ！',
+];
+const IMONO_ANIM = ['imono-jump', 'imono-spin', 'imono-wiggle', 'imono-pop'];
 
 // 進み具合ごとの応援メッセージ（開くたびにランダムで1つ選ぶ）
 const CHEERS = {
@@ -98,19 +150,21 @@ export default function App() {
   const [speech, setSpeech] = useState<string | null>(null);
   const [tapCount, setTapCount] = useState(0);
   const speechTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const speechRef = useRef<string | null>(null);
+  speechRef.current = speech;
+  // なでた累計回数（ブラウザに保存して回数に応じた反応を出す）
+  const petCount = useRef<number>(Number(localStorage.getItem('tororo-road:pets') ?? 0));
   // このセッション（＝この画面を開いている間）で固定の応援メッセージ。開くたびに変わる
   const [cheerSeed] = useState(() => Math.random());
 
   useEffect(() => () => clearTimeout(speechTimer.current), []);
 
   const speak = () => {
-    setSpeech((prev) => {
-      let line = IMONO_LINES[Math.floor(Math.random() * IMONO_LINES.length)];
-      if (IMONO_LINES.length > 1) {
-        while (line === prev) line = IMONO_LINES[Math.floor(Math.random() * IMONO_LINES.length)];
-      }
-      return line;
-    });
+    const isRepeat = speechRef.current !== null;
+    petCount.current += 1;
+    localStorage.setItem('tororo-road:pets', String(petCount.current));
+    const line = pickImonoLine(petCount.current, isRepeat, speechRef.current);
+    setSpeech(line);
     setTapCount((n) => n + 1);
     clearTimeout(speechTimer.current);
     speechTimer.current = setTimeout(() => setSpeech(null), 3200);
@@ -168,10 +222,13 @@ export default function App() {
     const clearedStage = await roadmap.toggleStatus(stageId);
     if (clearedStage) {
       const d = derived.find((s) => s.id === stageId);
+      const isGoal = d?.label === 'GOAL';
       setCelebration({
         label: d?.label ?? '',
         title: clearedStage.title,
         goal: clearedStage.goal,
+        reaction: isGoal ? 'とろりのお店、かんせい〜！🏮🎉' : rand(CELEBRATE_LINES),
+        anim: rand(IMONO_ANIM),
       });
     }
   };

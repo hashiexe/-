@@ -1,11 +1,14 @@
-// クリア時のお祝い演出：紙吹雪 + 「STAGE X-Y クリア！」カード。
+// クリア時のお祝い演出：紙吹雪 + いものすけの喜び + 「STAGE X-Y クリア！」カード。
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { Mascot } from './Mascot';
 
 export interface CelebrationData {
   label: string;
   title: string;
   goal: string;
+  reaction: string;
+  anim: string;
 }
 
 interface Props {
@@ -13,24 +16,27 @@ interface Props {
   onClose: () => void;
 }
 
-const COLORS = ['#e8823c', '#f2c14e', '#5c8a4a', '#5b3a56', '#ffd98a'];
+const COLORS = ['#e8823c', '#f2c14e', '#5c8a4a', '#8c4fe3', '#f6e03a'];
+
+function burst() {
+  const style = Math.floor(Math.random() * 3);
+  if (style === 0) {
+    confetti({ particleCount: 70, spread: 72, startVelocity: 40, origin: { y: 0.45 }, colors: COLORS, scalar: 0.9 });
+  } else if (style === 1) {
+    // 左右からのミニ大砲
+    confetti({ particleCount: 40, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: COLORS, scalar: 0.85 });
+    confetti({ particleCount: 40, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: COLORS, scalar: 0.85 });
+  } else {
+    // ふんわり舞い落ちる
+    confetti({ particleCount: 60, spread: 100, startVelocity: 26, gravity: 0.7, ticks: 220, origin: { y: 0.3 }, colors: COLORS, scalar: 1 });
+  }
+}
 
 export function Celebration({ data, onClose }: Props) {
   useEffect(() => {
     if (!data) return;
-    // 派手すぎない、でも嬉しい紙吹雪
-    const fire = () => {
-      confetti({
-        particleCount: 60,
-        spread: 70,
-        startVelocity: 38,
-        origin: { y: 0.45 },
-        colors: COLORS,
-        scalar: 0.9,
-      });
-    };
-    fire();
-    const t = setTimeout(fire, 260);
+    burst();
+    const t = setTimeout(burst, 280);
     return () => clearTimeout(t);
   }, [data]);
 
@@ -39,11 +45,10 @@ export function Celebration({ data, onClose }: Props) {
   return (
     <div className="overlay" onClick={onClose}>
       <div className="clear-card" onClick={(e) => e.stopPropagation()}>
-        <div className="emoji">🎉</div>
-        <h2>
-          {data.label === 'GOAL' ? 'GOAL' : `STAGE ${data.label}`} クリア!
-        </h2>
-        <p>{data.goal || data.title}</p>
+        <Mascot size={78} className={`celebrate-mascot ${data.anim}`} />
+        <h2>{data.label === 'GOAL' ? 'GOAL' : `STAGE ${data.label}`} クリア!</h2>
+        <p className="reaction">{data.reaction}</p>
+        <p className="goal-text">{data.goal || data.title}</p>
         <button className="btn btn-primary" onClick={onClose}>
           つぎへすすむ
         </button>
