@@ -1,8 +1,15 @@
-// マスコット「いものすけ」— 焼き芋の妖精。インラインSVG。
+// マスコット「いものすけ」— 焼き芋の妖精。
+// 上半分=黄色（中身）／下半分=紫の皮（種のポツポツ）、点目にT字の口、頭から湯気。
+// 手描き風の太い黒フチ。インラインSVG。
 interface Props {
   size?: number;
   className?: string;
 }
+
+const BODY = 'M31 9 C19 9 12 20 12 33 C12 46 19 57 30 57 C41 57 52 48 52 34 C52 20 44 9 31 9 Z';
+const PEEL = 'M11 40 Q18 36 25 40 Q32 44 39 40 Q46 36 53 40 L53 58 L11 58 Z';
+const DIV = 'M11 40 Q18 36 25 40 Q32 44 39 40 Q46 36 53 40';
+const INK = '#241c16';
 
 export function Mascot({ size = 64, className }: Props) {
   return (
@@ -14,31 +21,60 @@ export function Mascot({ size = 64, className }: Props) {
       role="img"
       aria-label="いものすけ"
     >
-      {/* 葉っぱ */}
-      <path d="M32 8 C30 2 22 2 22 8 C22 12 28 14 32 12 Z" fill="#5c8a4a" />
-      <path d="M32 8 C34 2 42 2 42 8 C42 12 36 14 32 12 Z" fill="#3f6633" />
-      {/* からだ（さつまいも） */}
-      <ellipse cx="32" cy="38" rx="20" ry="22" fill="#e8823c" />
-      <path
-        d="M32 16 C18 16 12 30 14 44 C16 56 26 60 32 60 C38 60 48 56 50 44 C52 30 46 16 32 16 Z"
-        fill="#e8823c"
-      />
-      {/* 皮のグラデ影 */}
-      <path
-        d="M44 22 C50 30 50 44 44 52 C50 44 50 30 44 22 Z"
-        fill="#c86a2e"
-        opacity="0.6"
-      />
-      {/* ほっぺ */}
-      <circle cx="23" cy="42" r="3.5" fill="#f4a15e" />
-      <circle cx="41" cy="42" r="3.5" fill="#f4a15e" />
+      <defs>
+        <clipPath id="imono-body">
+          <path d={BODY} />
+        </clipPath>
+      </defs>
+
+      {/* からだ（黄色）＋皮（紫）を body でクリップ */}
+      <g clipPath="url(#imono-body)">
+        <rect x="0" y="0" width="64" height="64" fill="#f6e03a" />
+        <path d={PEEL} fill="#8c4fe3" />
+        {/* 皮の種（ポツポツ） */}
+        <g fill="#5b2ba6">
+          <ellipse cx="19" cy="47" rx="1" ry="1.9" transform="rotate(20 19 47)" />
+          <ellipse cx="27" cy="50" rx="1" ry="1.9" transform="rotate(-15 27 50)" />
+          <ellipse cx="35" cy="47" rx="1" ry="1.9" transform="rotate(18 35 47)" />
+          <ellipse cx="43" cy="50" rx="1" ry="1.9" transform="rotate(-20 43 50)" />
+          <ellipse cx="23" cy="54" rx="1" ry="1.8" transform="rotate(10 23 54)" />
+          <ellipse cx="39" cy="54" rx="1" ry="1.8" transform="rotate(-10 39 54)" />
+        </g>
+      </g>
+
+      {/* 中身と皮の境目 */}
+      <path d={DIV} fill="none" stroke={INK} strokeWidth="1.5" strokeOpacity="0.5" strokeLinecap="round" />
+      {/* 本体の輪郭 */}
+      <path d={BODY} fill="none" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
+
       {/* 目 */}
-      <circle cx="26" cy="37" r="2.4" fill="#3d2b24" />
-      <circle cx="38" cy="37" r="2.4" fill="#3d2b24" />
-      <circle cx="26.8" cy="36.2" r="0.8" fill="#fff" />
-      <circle cx="38.8" cy="36.2" r="0.8" fill="#fff" />
-      {/* 口（にっこり） */}
-      <path d="M29 43 Q32 46 35 43" stroke="#3d2b24" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      <circle cx="25.5" cy="29" r="2.1" fill={INK} />
+      <circle cx="36.5" cy="29" r="2.1" fill={INK} />
+
+      {/* 口（T字） */}
+      <path
+        d="M27 34 H35 M31 34 V41"
+        fill="none"
+        stroke={INK}
+        strokeWidth="4.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M27 34 H35 M31 34 V41"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* 湯気 */}
+      <g fill="none" stroke={INK} strokeWidth="1.7" strokeLinecap="round">
+        <path d="M26 7 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3" />
+        <path d="M31 7 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3" />
+        <path d="M36 7 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3" />
+      </g>
     </svg>
   );
 }

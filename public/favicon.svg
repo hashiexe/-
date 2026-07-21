@@ -1,9 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="14" fill="#fbf3e3"/>
-  <path d="M30 8 C28 3 22 3 22 8 C22 11 27 13 30 11 Z" fill="#5c8a4a"/>
-  <path d="M32 15 C19 15 13 29 15 43 C17 55 27 59 32 59 C37 59 47 55 49 43 C51 29 45 15 32 15 Z" fill="#e8823c"/>
-  <path d="M44 22 C50 30 50 44 44 52 C50 44 50 30 44 22 Z" fill="#c86a2e" opacity="0.6"/>
-  <circle cx="26" cy="37" r="2.4" fill="#3d2b24"/>
-  <circle cx="38" cy="37" r="2.4" fill="#3d2b24"/>
-  <path d="M29 43 Q32 46 35 43" stroke="#3d2b24" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <defs>
+    <clipPath id="b"><path d="M31 10 C19 10 13 21 13 33 C13 46 20 56 30 56 C41 56 51 47 51 34 C51 21 44 10 31 10 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#b)">
+    <rect x="0" y="0" width="64" height="64" fill="#f6e03a"/>
+    <path d="M12 40 Q19 36 26 40 Q33 44 40 40 Q47 36 53 40 L53 58 L12 58 Z" fill="#8c4fe3"/>
+  </g>
+  <path d="M31 10 C19 10 13 21 13 33 C13 46 20 56 30 56 C41 56 51 47 51 34 C51 21 44 10 31 10 Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="25.5" cy="29" r="2.2" fill="#241c16"/>
+  <circle cx="36.5" cy="29" r="2.2" fill="#241c16"/>
+  <path d="M27 34 H35 M31 34 V41" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 34 H35 M31 34 V41" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="none" stroke="#241c16" stroke-width="1.8" stroke-linecap="round">
+    <path d="M26 8 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3"/>
+    <path d="M31 8 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3"/>
+    <path d="M36 8 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3"/>
+  </g>
 </svg>

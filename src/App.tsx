@@ -10,6 +10,18 @@ import { Celebration, type CelebrationData } from './components/Celebration';
 import { ActivityLogPanel } from './components/ActivityLogPanel';
 import { Mascot } from './components/Mascot';
 
+// 進み具合に応じた応援メッセージ（ビジネスに詳しくなくても楽しく進められるように）
+function cheerMessage(cleared: number, total: number): string {
+  if (total === 0) return 'ステージを追加してみよう！';
+  if (cleared === 0) return 'さあ、はじめよう！🍠';
+  const r = cleared / total;
+  if (r >= 1) return 'ぜんぶクリア！おめでとう🎉';
+  if (r < 0.25) return 'いいスタート！その調子〜✨';
+  if (r < 0.5) return 'どんどん進んでるね！';
+  if (r < 0.75) return 'はんぶん超え！すごいっ💪';
+  return 'ゴールはすぐそこ！あとちょっと🏮';
+}
+
 export default function App() {
   const gate = useGate();
   const roadmap = useRoadmap(gate.actor);
@@ -23,6 +35,7 @@ export default function App() {
   const derived = useMemo(() => (snap ? deriveStages(snap) : []), [snap]);
   const clearedCount = derived.filter((s) => s.status === 'cleared').length;
   const total = derived.length;
+  const pct = total ? (clearedCount / total) * 100 : 0;
   const currentLabel = snap ? labelForStage(snap, snap.appState.current_stage_id) : '-';
 
   // ガード未通過なら入場画面
@@ -87,9 +100,20 @@ export default function App() {
             ぬける
           </button>
         </div>
-        <Mascot className="badge-mascot" size={64} />
-        <h1>とろりロード</h1>
-        <p className="tagline">おいも屋 とろり 開業ロードマップ</p>
+        <div className="title-plaque">
+          <span className="spark spark-a" aria-hidden>
+            ✨
+          </span>
+          <span className="spark spark-b" aria-hidden>
+            ✨
+          </span>
+          <Mascot className="mascot-big" size={62} />
+          <span className="title-text">
+            <h1>とろりロード</h1>
+            <span className="tagline">おいも屋 とろり 開業ロードマップ</span>
+          </span>
+          <Mascot className="mascot-small" size={40} />
+        </div>
 
         <div className="stat-strip">
           <div className="stat-chip">
@@ -100,12 +124,19 @@ export default function App() {
           </div>
           {roadmap.isCloud && <div className="stat-chip">☁️ 同期中</div>}
         </div>
-        <div className="progress-track">
-          <div
-            className="progress-fill"
-            style={{ width: total ? `${(clearedCount / total) * 100}%` : '0%' }}
-          />
+
+        <div className="progress-wrap">
+          <div className="progress-walker" style={{ left: `${Math.min(Math.max(pct, 3), 97)}%` }}>
+            <Mascot size={30} />
+          </div>
+          <div className="progress-track">
+            <div className="progress-fill" style={{ width: `${pct}%` }} />
+          </div>
+          <span className="progress-goal" aria-hidden>
+            🏮
+          </span>
         </div>
+        <p className="cheer">{cheerMessage(clearedCount, total)}</p>
 
         <div className="toolbar">
           <button
