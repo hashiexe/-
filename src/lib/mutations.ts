@@ -2,7 +2,7 @@
 // localStorage バックエンドはこれをそのまま利用し、
 // Supabase バックエンドは同じ意味の行操作を行う。
 import type { Actor, ActivityLog, LogAction, Snapshot, Stage, StageStatus } from '../types';
-import { labelForStage } from './labels';
+import { deriveStages, labelForStage } from './labels';
 
 export function newId(): string {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID();
@@ -49,8 +49,18 @@ export function toggleStatus(snap: Snapshot, stageId: string, actor: Actor): Sna
         }
       : s,
   );
+
+  // いものすけが乗っているステージをクリアしたら、次の未達成ステージへ自動で進む
+  let appState = snap.appState;
+  if (nextStatus === 'cleared' && snap.appState.current_stage_id === stageId) {
+    const ordered = deriveStages({ ...snap, stages });
+    const idx = ordered.findIndex((s) => s.id === stageId);
+    const nextTodo = ordered.slice(idx + 1).find((s) => s.status === 'todo') ?? ordered.find((s) => s.status === 'todo');
+    if (nextTodo) appState = { ...snap.appState, current_stage_id: nextTodo.id };
+  }
+
   const log = makeLog(snap, target, nextStatus === 'cleared' ? 'cleared' : 'reverted', actor);
-  return { ...snap, stages, logs: withLog(snap, log) };
+  return { ...snap, stages, appState, logs: withLog(snap, log) };
 }
 
 export type StageEdit = Pick<Stage, 'title' | 'goal' | 'icon' | 'world_id'>;

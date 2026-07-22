@@ -67,6 +67,10 @@ export class SupabaseBackend implements Backend {
     const cur = await this.load();
     const next = M.toggleStatus(cur, stageId, actor);
     const changed = next.stages.filter((s) => s.id === stageId);
+    // マーカーが自動で次へ進んだ場合は app_state も保存
+    if (next.appState.current_stage_id !== cur.appState.current_stage_id) {
+      await this.db.from('app_state').upsert({ id: 1, current_stage_id: next.appState.current_stage_id });
+    }
     return this.persist(next, changed, next.logs[0]);
   }
 
