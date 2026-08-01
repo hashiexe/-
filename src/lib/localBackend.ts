@@ -55,6 +55,22 @@ export class LocalBackend implements Backend {
     return write(M.renameWorld(read(), worldId, name, actor));
   }
 
+  async addWorld(actor: Actor): Promise<Snapshot> {
+    return write(M.addWorld(read(), actor).snap);
+  }
+
+  async deleteWorld(worldId: string, actor: Actor): Promise<Snapshot> {
+    return write(M.deleteWorld(read(), worldId, actor));
+  }
+
+  async setPriority(stageId: string, on: boolean, actor: Actor): Promise<Snapshot> {
+    return write(M.setPriority(read(), stageId, on, actor));
+  }
+
+  async setNextEvent(date: string | null, place: string | null, actor: Actor): Promise<Snapshot> {
+    return write(M.setNextEvent(read(), date, place, actor));
+  }
+
   async setMarker(stageId: string | null, actor: Actor): Promise<Snapshot> {
     return write(M.setMarker(read(), stageId, actor));
   }

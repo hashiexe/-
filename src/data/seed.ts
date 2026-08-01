@@ -1,4 +1,4 @@
-// 初期ロードマップ定義（要件定義書 §7）— 全38ステージ / 5ワールド
+// 初期ロードマップ定義 — 全ステージ / ワールド
 import type { Snapshot, Stage, World } from '../types';
 
 interface SeedStage {
@@ -35,6 +35,14 @@ const SEED_WORLDS: SeedWorld[] = [
     ],
   },
   {
+    key: 'w-dev',
+    name: '商品開発',
+    stages: [
+      { key: 's-dev1', title: '干し芋の開発', goal: '定番にする干し芋のレシピ・仕上がりを確定', icon: '🍠' },
+      { key: 's-dev2', title: '犬用お菓子の開発', goal: 'わんちゃん向け焼き芋おやつを商品化', icon: '🐕' },
+    ],
+  },
+  {
     key: 'w2',
     name: 'はじめての黒字出店',
     stages: [
@@ -60,6 +68,10 @@ const SEED_WORLDS: SeedWorld[] = [
       { key: 's3-4', title: 'SNSを開設する', goal: '出店告知の発信チャネルを作る', icon: '📱' },
       { key: 's3-5', title: 'リピーターに再会する', goal: '「前も買ったよ」のお客さんが現れる', icon: '🤝' },
       { key: 's3-6', title: '月4回の定期出店', goal: '出店ペースを確立', icon: '🏁' },
+      { key: 's3-coffee', title: '仕入れコーヒーの確定', goal: 'マリアージュに合う豆を決めて仕入れ先を確定', icon: '☕' },
+      { key: 's3-mascot', title: 'いものすけ（マスコット）の作成', goal: 'いものすけのイラスト・グッズを用意', icon: '🐭' },
+      { key: 's3-sign', title: '赤ちゃん・犬が焼き芋を食べてる看板の作成', goal: 'ほっこり看板でお店の顔をつくる', icon: '🪧' },
+      { key: 's3-game', title: '看板ゲームの作成', goal: '看板を使ったミニゲームで集客・話題づくり', icon: '🎮' },
     ],
   },
   {
@@ -79,9 +91,14 @@ const SEED_WORLDS: SeedWorld[] = [
     name: 'とろりのお店',
     stages: [
       { key: 's5-1', title: '出店データをまとめる', goal: 'マルシェ・ECの実績を集計', icon: '📊' },
-      { key: 's5-2', title: '実店舗の収支計画をFIX', goal: '', icon: '🧮' },
+      { key: 's5-2', title: '収支計画をFIX', goal: 'シェアキッチンの収支計画を確定', icon: '🧮' },
       { key: 's5-3', title: '物件・資金のあてをつける', goal: '', icon: '🔑' },
-      { key: 's5-goal', title: '実店舗オープン', goal: 'とろりロードのゴール！', icon: '🏮', kind: 'goal' },
+      { key: 's5-save10', title: '貯金10万円', goal: '', icon: '🐷' },
+      { key: 's5-save30', title: '貯金30万円', goal: '', icon: '🐷' },
+      { key: 's5-save50', title: '貯金50万円', goal: '', icon: '🐷' },
+      { key: 's5-save70', title: '貯金70万円', goal: '', icon: '🐷' },
+      { key: 's5-save100', title: '貯金100万円', goal: '開業資金の目標達成', icon: '🐷' },
+      { key: 's5-goal', title: 'シェアキッチン週1オープン', goal: 'とろりロードのゴール！', icon: '🍳', kind: 'goal' },
     ],
   },
 ];
@@ -104,6 +121,7 @@ export function buildSeedSnapshot(): Snapshot {
         order: si,
         status: 'todo',
         kind: s.kind ?? 'normal',
+        priority: false,
         cleared_at: null,
         updated_by: null,
         updated_at: now,
@@ -115,9 +133,9 @@ export function buildSeedSnapshot(): Snapshot {
     worlds,
     stages,
     logs: [],
-    appState: { current_stage_id: 's1-1' },
+    appState: { current_stage_id: 's1-1', next_event_date: null, next_event_place: null },
   };
 }
 
-/** 全ステージ数（要件上は38） */
+/** 全ステージ数 */
 export const TOTAL_STAGES = SEED_WORLDS.reduce((n, w) => n + w.stages.length, 0);

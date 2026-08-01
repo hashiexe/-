@@ -8,6 +8,8 @@ import { WorldMap } from './components/WorldMap';
 import { StageDetail } from './components/StageDetail';
 import { Celebration, type CelebrationData } from './components/Celebration';
 import { ActivityLogPanel } from './components/ActivityLogPanel';
+import { NextEventBar } from './components/NextEventBar';
+import { PriorityStrip } from './components/PriorityStrip';
 import { Mascot } from './components/Mascot';
 
 const rand = <T,>(a: T[]): T => a[Math.floor(Math.random() * a.length)];
@@ -217,6 +219,7 @@ export default function App() {
 
   const openStage = openStageId ? derived.find((s) => s.id === openStageId) ?? null : null;
   const worlds = sortedWorlds(snap);
+  const priorityStages = derived.filter((s) => s.priority);
 
   const celebrateIfCleared = async (stageId: string) => {
     const clearedStage = await roadmap.toggleStatus(stageId);
@@ -310,6 +313,18 @@ export default function App() {
         </div>
       </header>
 
+      <NextEventBar
+        date={snap.appState.next_event_date}
+        place={snap.appState.next_event_place}
+        onSave={(date, place) => void roadmap.setNextEvent(date, place)}
+      />
+
+      <PriorityStrip
+        stages={priorityStages}
+        onOpen={(id) => setOpenStageId(id)}
+        onQuickClear={(id) => void celebrateIfCleared(id)}
+      />
+
       <WorldMap
         snap={snap}
         reorderMode={reorderMode}
@@ -317,6 +332,8 @@ export default function App() {
         onQuickClear={(id) => void celebrateIfCleared(id)}
         onAddStage={(worldId) => void roadmap.addStage(worldId)}
         onRenameWorld={(worldId, name) => void roadmap.renameWorld(worldId, name)}
+        onAddWorld={() => void roadmap.addWorld()}
+        onDeleteWorld={(worldId) => void roadmap.deleteWorld(worldId)}
         onReorder={(arr, movedId) => void roadmap.reorder(arr, movedId)}
       />
 
@@ -334,6 +351,7 @@ export default function App() {
           onSave={(edit) => handleSave(openStage.id, edit)}
           onDelete={() => void roadmap.deleteStage(openStage.id)}
           onSetMarker={(on) => void roadmap.setMarker(on ? openStage.id : null)}
+          onTogglePriority={(on) => void roadmap.setPriority(openStage.id, on)}
           onClose={() => setOpenStageId(null)}
         />
       )}

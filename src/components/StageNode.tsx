@@ -46,6 +46,11 @@ export const StageNode = forwardRef<HTMLDivElement, Props>(function StageNode(
         {isCurrent && <Mascot className="mascot-marker" size={34} />}
         <span aria-hidden>{stage.icon}</span>
         {cleared && <div className="check">✓</div>}
+        {stage.priority && (
+          <div className="prio-badge" aria-label="優先タスク">
+            ⭐
+          </div>
+        )}
         {reorderMode && <span className="drag-handle">⠿ うごかす</span>}
       </div>
 

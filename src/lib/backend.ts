@@ -10,6 +10,10 @@ export interface Backend {
   addStage(worldId: string, actor: Actor): Promise<Snapshot>;
   deleteStage(stageId: string, actor: Actor): Promise<Snapshot>;
   renameWorld(worldId: string, name: string, actor: Actor): Promise<Snapshot>;
+  addWorld(actor: Actor): Promise<Snapshot>;
+  deleteWorld(worldId: string, actor: Actor): Promise<Snapshot>;
+  setPriority(stageId: string, on: boolean, actor: Actor): Promise<Snapshot>;
+  setNextEvent(date: string | null, place: string | null, actor: Actor): Promise<Snapshot>;
   setMarker(stageId: string | null, actor: Actor): Promise<Snapshot>;
   reorder(arrangement: Record<string, string[]>, movedStageId: string | null, actor: Actor): Promise<Snapshot>;
   /** 他端末/他タブの変更通知を購読。戻り値は解除関数 */

@@ -1,7 +1,7 @@
 // スナップショットに対する純粋な変換関数群。
 // localStorage バックエンドはこれをそのまま利用し、
 // Supabase バックエンドは同じ意味の行操作を行う。
-import type { Actor, ActivityLog, LogAction, Snapshot, Stage, StageStatus } from '../types';
+import type { Actor, ActivityLog, LogAction, Snapshot, Stage, StageStatus, World } from '../types';
 import { deriveStages, labelForStage } from './labels';
 
 export function newId(): string {
@@ -97,6 +97,7 @@ export function addStage(snap: Snapshot, worldId: string, actor: Actor): { snap:
     order,
     status: 'todo',
     kind: 'normal',
+    priority: false,
     cleared_at: null,
     updated_by: actor,
     updated_at: now,
@@ -125,6 +126,54 @@ export function renameWorld(snap: Snapshot, worldId: string, name: string, actor
   const worlds = snap.worlds.map((w) => (w.id === worldId ? { ...w, name } : w));
   const log = makeLog(snap, { id: null, title: name }, 'renamed_world', actor);
   return { ...snap, worlds, logs: withLog(snap, log) };
+}
+
+/** 新規ワールド追加（末尾。ゴールワールドの手前に置きたい場合は並び替えで移動） */
+export function addWorld(snap: Snapshot, actor: Actor): { snap: Snapshot; world: World } {
+  const order = Math.max(-1, ...snap.worlds.map((w) => w.order)) + 1;
+  const world: World = { id: newId(), name: '新しいワールド', order };
+  const worlds = [...snap.worlds, world];
+  const log = makeLog(snap, { id: null, title: world.name }, 'added_world', actor);
+  return { snap: { ...snap, worlds, logs: withLog(snap, log) }, world };
+}
+
+/** ワールド削除（中のステージも一緒に消える） */
+export function deleteWorld(snap: Snapshot, worldId: string, actor: Actor): Snapshot {
+  const target = snap.worlds.find((w) => w.id === worldId);
+  if (!target) return snap;
+  const removedIds = new Set(snap.stages.filter((s) => s.world_id === worldId).map((s) => s.id));
+  const worlds = snap.worlds.filter((w) => w.id !== worldId);
+  const stages = snap.stages.filter((s) => s.world_id !== worldId);
+  const appState =
+    snap.appState.current_stage_id && removedIds.has(snap.appState.current_stage_id)
+      ? { ...snap.appState, current_stage_id: null }
+      : snap.appState;
+  const log = makeLog(snap, { id: null, title: target.name }, 'deleted_world', actor);
+  return { ...snap, worlds, stages, appState, logs: withLog(snap, log) };
+}
+
+/** 優先タスクフラグの切替 */
+export function setPriority(snap: Snapshot, stageId: string, on: boolean, actor: Actor): Snapshot {
+  const target = snap.stages.find((s) => s.id === stageId);
+  if (!target) return snap;
+  const now = new Date().toISOString();
+  const stages = snap.stages.map((s) =>
+    s.id === stageId ? { ...s, priority: on, updated_by: actor, updated_at: now } : s,
+  );
+  const log = makeLog(snap, target, 'priority', actor);
+  return { ...snap, stages, logs: withLog(snap, log) };
+}
+
+/** 次回出店（日・場所）を設定 */
+export function setNextEvent(
+  snap: Snapshot,
+  date: string | null,
+  place: string | null,
+  actor: Actor,
+): Snapshot {
+  const appState = { ...snap.appState, next_event_date: date, next_event_place: place };
+  const log = makeLog(snap, { id: null, title: place ?? '' }, 'event', actor);
+  return { ...snap, appState, logs: withLog(snap, log) };
 }
 
 /** いものすけの現在地マーカーを設定 */
@@ -178,6 +227,14 @@ export function describeLog(log: ActivityLog): string {
       return `${who}が ${where}を並び替えました`;
     case 'renamed_world':
       return `${who}がワールド名を「${log.stage_title}」に変更しました`;
+    case 'added_world':
+      return `${who}がワールドを追加しました`;
+    case 'deleted_world':
+      return `${who}がワールド「${log.stage_title}」を削除しました`;
+    case 'priority':
+      return `${who}が ${where}の優先タスクを切り替えました`;
+    case 'event':
+      return `${who}が次回出店の予定を更新しました`;
     case 'marker':
       return log.stage_id
         ? `${who}が現在地を ${where}にしました`

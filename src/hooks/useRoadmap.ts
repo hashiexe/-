@@ -15,6 +15,10 @@ export interface Roadmap {
   addStage: (worldId: string) => Promise<void>;
   deleteStage: (stageId: string) => Promise<void>;
   renameWorld: (worldId: string, name: string) => Promise<void>;
+  addWorld: () => Promise<void>;
+  deleteWorld: (worldId: string) => Promise<void>;
+  setPriority: (stageId: string, on: boolean) => Promise<void>;
+  setNextEvent: (date: string | null, place: string | null) => Promise<void>;
   setMarker: (stageId: string | null) => Promise<void>;
   reorder: (arrangement: Record<string, string[]>, movedStageId: string | null) => Promise<void>;
 }
@@ -97,6 +101,31 @@ export function useRoadmap(actor: Actor | null): Roadmap {
     [backend, requireActor],
   );
 
+  const addWorld = useCallback(async () => {
+    setSnap(await backend.addWorld(requireActor()));
+  }, [backend, requireActor]);
+
+  const deleteWorld = useCallback(
+    async (worldId: string) => {
+      setSnap(await backend.deleteWorld(worldId, requireActor()));
+    },
+    [backend, requireActor],
+  );
+
+  const setPriority = useCallback(
+    async (stageId: string, on: boolean) => {
+      setSnap(await backend.setPriority(stageId, on, requireActor()));
+    },
+    [backend, requireActor],
+  );
+
+  const setNextEvent = useCallback(
+    async (date: string | null, place: string | null) => {
+      setSnap(await backend.setNextEvent(date, place, requireActor()));
+    },
+    [backend, requireActor],
+  );
+
   const setMarker = useCallback(
     async (stageId: string | null) => {
       setSnap(await backend.setMarker(stageId, requireActor()));
@@ -121,6 +150,10 @@ export function useRoadmap(actor: Actor | null): Roadmap {
     addStage,
     deleteStage,
     renameWorld,
+    addWorld,
+    deleteWorld,
+    setPriority,
+    setNextEvent,
     setMarker,
     reorder,
   };

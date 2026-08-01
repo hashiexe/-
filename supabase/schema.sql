@@ -1,9 +1,8 @@
--- とろりロード — Supabase スキーマ + 初期38ステージ投入
--- Supabase の SQL Editor に貼り付けて実行してください。
--- 無料枠（Free プラン）の範囲で動作します。
+-- とろりロード — Supabase スキーマ + 初期データ投入
+-- Supabase の SQL Editor に貼り付けて実行してください。無料枠で動作します。
+-- ※すでに古い版で作成済みの場合は、これではなく supabase/migration-2.sql を実行してください。
 
 -- ========== テーブル ==========
-
 create table if not exists public.worlds (
   id    text primary key,
   name  text not null,
@@ -19,8 +18,9 @@ create table if not exists public.stages (
   "order"     int  not null default 0,
   status      text not null default 'todo',   -- 'todo' | 'cleared'
   kind        text not null default 'normal', -- 'normal' | 'goal'
+  priority    boolean not null default false, -- 優先タスク
   cleared_at  timestamptz,
-  updated_by  text,                           -- '夫' | '妻'
+  updated_by  text,
   updated_at  timestamptz not null default now()
 );
 
@@ -29,27 +29,25 @@ create table if not exists public.activity_logs (
   stage_id    text,
   stage_label text not null default '-',
   stage_title text not null default '',
-  action      text not null,  -- cleared/reverted/edited/added/deleted/moved/renamed_world/marker
-  actor       text not null,  -- '夫' | '妻'
+  action      text not null,
+  actor       text not null,
   created_at  timestamptz not null default now()
 );
 
--- 現在地マーカーなどアプリ全体の共有状態（単一行 id=1）
+-- 現在地マーカー・次回出店などアプリ全体の共有状態（単一行 id=1）
 create table if not exists public.app_state (
   id                int primary key default 1,
-  current_stage_id  text
+  current_stage_id  text,
+  next_event_date   text,
+  next_event_place  text
 );
 
--- リアルタイム購読の対象に含める
 alter publication supabase_realtime add table public.worlds;
 alter publication supabase_realtime add table public.stages;
 alter publication supabase_realtime add table public.activity_logs;
 alter publication supabase_realtime add table public.app_state;
 
--- ========== RLS（簡易ガード） ==========
--- 方式A（既定・あいことば方式）：匿名キーで読み書きを許可する。
---   URL を知っただけの第三者からの保護はフロントの「あいことば」で行う。
---   より堅牢にしたい場合は方式Bへ（README 参照）。
+-- ========== RLS（あいことば方式＝匿名キーで読み書き） ==========
 alter table public.worlds        enable row level security;
 alter table public.stages        enable row level security;
 alter table public.activity_logs enable row level security;
@@ -64,20 +62,14 @@ create policy "anon write logs"   on public.activity_logs for all    using (true
 create policy "anon read state"   on public.app_state     for select using (true);
 create policy "anon write state"  on public.app_state     for all    using (true) with check (true);
 
--- 方式B（堅牢・Supabase ログイン方式）にする場合は、上の8つの policy を消して
--- 代わりに以下のように「認証済みのみ許可」に置き換える（夫・妻のアカウントを作成しておく）：
---   create policy "auth all worlds" on public.worlds for all
---     using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
---   （stages / activity_logs / app_state も同様）
-
--- ========== 初期データ（全38ステージ） ==========
-
+-- ========== 初期データ ==========
 insert into public.worlds (id, name, "order") values
   ('w1', '焼き芋づくりを極める', 0),
-  ('w2', 'はじめての黒字出店', 1),
-  ('w3', 'ファンとリピーターづくり', 2),
-  ('w4', 'おうちに届ける', 3),
-  ('w5', 'とろりのお店', 4)
+  ('w-dev', '商品開発', 1),
+  ('w2', 'はじめての黒字出店', 2),
+  ('w3', 'ファンとリピーターづくり', 3),
+  ('w4', 'おうちに届ける', 4),
+  ('w5', 'とろりのお店', 5)
 on conflict (id) do nothing;
 
 insert into public.stages (id, world_id, title, goal, icon, "order", status, kind) values
@@ -93,6 +85,8 @@ insert into public.stages (id, world_id, title, goal, icon, "order", status, kin
   ('s1-10','w1','1日160本つくれる','','🍠',9,'todo','normal'),
   ('s1-11','w1','1日180本つくれる','','🍠',10,'todo','normal'),
   ('s1-12','w1','1日200本つくれる','生産力MAXクリア','🏁',11,'todo','normal'),
+  ('s-dev1','w-dev','干し芋の開発','定番にする干し芋のレシピ・仕上がりを確定','🍠',0,'todo','normal'),
+  ('s-dev2','w-dev','犬用お菓子の開発','わんちゃん向け焼き芋おやつを商品化','🐕',1,'todo','normal'),
   ('s2-1','w2','出店の持ち物を揃える','什器・釣銭・のぼり等のチェックリスト完成','📋',0,'todo','normal'),
   ('s2-2','w2','初出店をやりきる','イケ・サンパークに1回出店（完走が目標）','🎪',1,'todo','normal'),
   ('s2-3','w2','1出店で30本売れる','','💰',2,'todo','normal'),
@@ -109,6 +103,10 @@ insert into public.stages (id, world_id, title, goal, icon, "order", status, kin
   ('s3-4','w3','SNSを開設する','出店告知の発信チャネルを作る','📱',3,'todo','normal'),
   ('s3-5','w3','リピーターに再会する','「前も買ったよ」のお客さんが現れる','🤝',4,'todo','normal'),
   ('s3-6','w3','月4回の定期出店','出店ペースを確立','🏁',5,'todo','normal'),
+  ('s3-coffee','w3','仕入れコーヒーの確定','マリアージュに合う豆を決めて仕入れ先を確定','☕',6,'todo','normal'),
+  ('s3-mascot','w3','いものすけ（マスコット）の作成','いものすけのイラスト・グッズを用意','🐭',7,'todo','normal'),
+  ('s3-sign','w3','赤ちゃん・犬が焼き芋を食べてる看板の作成','ほっこり看板でお店の顔をつくる','🪧',8,'todo','normal'),
+  ('s3-game','w3','看板ゲームの作成','看板を使ったミニゲームで集客・話題づくり','🎮',9,'todo','normal'),
   ('s4-1','w4','商品ページを作る','冷凍焼き芋の魅力（無添加・家族で・ストック可）を言語化','📝',0,'todo','normal'),
   ('s4-2','w4','ECサイトを公開する','自社サイトをリリース','🏁',1,'todo','normal'),
   ('s4-3','w4','クール便の発送体制を作る','梱包・送料設定を確定','📦',2,'todo','normal'),
@@ -116,9 +114,14 @@ insert into public.stages (id, world_id, title, goal, icon, "order", status, kin
   ('s4-5','w4','リピート通販が入る','EC経由の再注文が発生','🔁',4,'todo','normal'),
   ('s4-6','w4','月間EC販売の目標達成','','🏁',5,'todo','normal'),
   ('s5-1','w5','出店データをまとめる','マルシェ・ECの実績を集計','📊',0,'todo','normal'),
-  ('s5-2','w5','実店舗の収支計画をFIX','','🧮',1,'todo','normal'),
+  ('s5-2','w5','収支計画をFIX','シェアキッチンの収支計画を確定','🧮',1,'todo','normal'),
   ('s5-3','w5','物件・資金のあてをつける','','🔑',2,'todo','normal'),
-  ('s5-goal','w5','実店舗オープン','とろりロードのゴール！','🏮',3,'todo','goal')
+  ('s5-save10','w5','貯金10万円','','🐷',3,'todo','normal'),
+  ('s5-save30','w5','貯金30万円','','🐷',4,'todo','normal'),
+  ('s5-save50','w5','貯金50万円','','🐷',5,'todo','normal'),
+  ('s5-save70','w5','貯金70万円','','🐷',6,'todo','normal'),
+  ('s5-save100','w5','貯金100万円','開業資金の目標達成','🐷',7,'todo','normal'),
+  ('s5-goal','w5','シェアキッチン週1オープン','とろりロードのゴール！','🍳',8,'todo','goal')
 on conflict (id) do nothing;
 
 insert into public.app_state (id, current_stage_id) values (1, 's1-1')

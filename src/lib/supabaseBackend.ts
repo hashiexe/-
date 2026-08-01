@@ -40,11 +40,16 @@ export class SupabaseBackend implements Backend {
       return this.load();
     }
 
+    const app = aRes.data?.[0];
     return {
       worlds,
       stages: (sRes.data ?? []) as Stage[],
       logs: (lRes.data ?? []) as ActivityLog[],
-      appState: { current_stage_id: aRes.data?.[0]?.current_stage_id ?? null },
+      appState: {
+        current_stage_id: app?.current_stage_id ?? null,
+        next_event_date: app?.next_event_date ?? null,
+        next_event_place: app?.next_event_place ?? null,
+      },
     };
   }
 
@@ -102,6 +107,42 @@ export class SupabaseBackend implements Backend {
     const cur = await this.load();
     const next = M.renameWorld(cur, worldId, name, actor);
     await this.db.from('worlds').update({ name }).eq('id', worldId);
+    await this.db.from('activity_logs').insert(next.logs[0]);
+    return next;
+  }
+
+  async addWorld(actor: Actor): Promise<Snapshot> {
+    const cur = await this.load();
+    const { snap: next, world } = M.addWorld(cur, actor);
+    await this.db.from('worlds').insert(world);
+    await this.db.from('activity_logs').insert(next.logs[0]);
+    return next;
+  }
+
+  async deleteWorld(worldId: string, actor: Actor): Promise<Snapshot> {
+    const cur = await this.load();
+    const next = M.deleteWorld(cur, worldId, actor);
+    // stages は worlds への on delete cascade で消えるが、明示的にも消しておく
+    await this.db.from('stages').delete().eq('world_id', worldId);
+    await this.db.from('worlds').delete().eq('id', worldId);
+    if (next.appState.current_stage_id !== cur.appState.current_stage_id) {
+      await this.db.from('app_state').upsert({ id: 1, current_stage_id: next.appState.current_stage_id });
+    }
+    await this.db.from('activity_logs').insert(next.logs[0]);
+    return next;
+  }
+
+  async setPriority(stageId: string, on: boolean, actor: Actor): Promise<Snapshot> {
+    const cur = await this.load();
+    const next = M.setPriority(cur, stageId, on, actor);
+    const changed = next.stages.filter((s) => s.id === stageId);
+    return this.persist(next, changed, next.logs[0]);
+  }
+
+  async setNextEvent(date: string | null, place: string | null, actor: Actor): Promise<Snapshot> {
+    const cur = await this.load();
+    const next = M.setNextEvent(cur, date, place, actor);
+    await this.db.from('app_state').upsert({ id: 1, next_event_date: date, next_event_place: place });
     await this.db.from('activity_logs').insert(next.logs[0]);
     return next;
   }

@@ -17,6 +17,7 @@ interface Props {
   onSave: (edit: StageEdit) => void;
   onDelete: () => void;
   onSetMarker: (on: boolean) => void;
+  onTogglePriority: (on: boolean) => void;
   onClose: () => void;
 }
 
@@ -28,6 +29,7 @@ export function StageDetail({
   onSave,
   onDelete,
   onSetMarker,
+  onTogglePriority,
   onClose,
 }: Props) {
   const [title, setTitle] = useState(stage.title);
@@ -98,6 +100,12 @@ export function StageDetail({
         <div className="btn-row">
           <button className="btn btn-primary" onClick={save}>
             ほぞんする
+          </button>
+          <button
+            className={`btn ${stage.priority ? 'btn-ghost' : 'btn-gold'}`}
+            onClick={() => onTogglePriority(!stage.priority)}
+          >
+            {stage.priority ? '⭐ 優先タスクを外す' : '⭐ 優先タスクにする'}
           </button>
           <button className="btn btn-leaf" onClick={() => onSetMarker(!isCurrent)}>
             {isCurrent ? 'いものすけを ここから外す' : 'ここを いまの目標にする'}

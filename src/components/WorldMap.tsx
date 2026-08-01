@@ -30,6 +30,8 @@ interface Props {
   onQuickClear: (stageId: string) => void;
   onAddStage: (worldId: string) => void;
   onRenameWorld: (worldId: string, name: string) => void;
+  onAddWorld: () => void;
+  onDeleteWorld: (worldId: string) => void;
   onReorder: (arrangement: Record<string, string[]>, movedStageId: string | null) => void;
 }
 
@@ -56,6 +58,8 @@ export function WorldMap({
   onQuickClear,
   onAddStage,
   onRenameWorld,
+  onAddWorld,
+  onDeleteWorld,
   onReorder,
 }: Props) {
   const worlds = useMemo(() => sortedWorlds(snap), [snap]);
@@ -159,8 +163,10 @@ export function WorldMap({
               cleared={clearedInWorld}
               total={ids.length}
               stageIds={ids}
+              reorderMode={reorderMode}
               onAddStage={() => onAddStage(w.id)}
               onRenameWorld={(name) => onRenameWorld(w.id, name)}
+              onDeleteWorld={() => onDeleteWorld(w.id)}
             >
               {ids.map((sid, si) => {
                 const st = stageById.get(sid);
@@ -185,6 +191,9 @@ export function WorldMap({
             </WorldBlock>
           );
         })}
+        <button className="add-world" onClick={onAddWorld}>
+          ＋ ワールドを追加
+        </button>
       </div>
 
       <DragOverlay>
@@ -207,8 +216,10 @@ interface BlockProps {
   cleared: number;
   total: number;
   stageIds: string[];
+  reorderMode: boolean;
   onAddStage: () => void;
   onRenameWorld: (name: string) => void;
+  onDeleteWorld: () => void;
   children: React.ReactNode;
 }
 
@@ -220,11 +231,18 @@ function WorldBlock({
   cleared,
   total,
   stageIds,
+  reorderMode,
   onAddStage,
   onRenameWorld,
+  onDeleteWorld,
   children,
 }: BlockProps) {
   const { setNodeRef } = useDroppable({ id: worldId });
+  const confirmDelete = () => {
+    if (window.confirm(`ワールド「${name}」を削除します。\n中のステージ(${total}個)も一緒に消えます。よろしいですか？`)) {
+      onDeleteWorld();
+    }
+  };
   return (
     <div className="world-card" data-accent={index % 5}>
       <div className="world-banner">
@@ -249,6 +267,11 @@ function WorldBlock({
         <span className="world-progress">
           {cleared}/{total}
         </span>
+        {reorderMode && (
+          <button className="del-world" onClick={confirmDelete} title="ワールドを削除" aria-label="ワールドを削除">
+            🗑
+          </button>
+        )}
         <button className="add-stage" onClick={onAddStage} title="ステージを追加" aria-label="ステージを追加">
           ＋
         </button>
