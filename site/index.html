@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>お芋やとろり | 蜜あふれる焼き芋</title>
+    <meta
+      name="description"
+      content="お芋やとろりの公式サイト。低温でじっくり焼き上げた蜜あふれる焼き芋を、オンラインでもお届けします。出店スケジュールも掲載中。"
+    />
+    <meta name="theme-color" content="#fdf6ea" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+    <!-- OGP（LINEやInstagramで共有されたときの見た目） -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="お芋やとろり | 蜜あふれる焼き芋" />
+    <meta property="og:description" content="低温でじっくり。スプーンですくう、蜜の壺。" />
+    <meta property="og:image" content="assets/ogp.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@400;600;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!-- ============================ ヘッダー ============================ -->
+    <header class="header" id="header">
+      <a class="header__logo" href="#top">
+        <span class="header__mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="34" height="34">
+            <ellipse cx="20" cy="20" rx="17" ry="12" transform="rotate(-28 20 20)" fill="#7b4a86" />
+            <ellipse cx="20" cy="20" rx="11" ry="7" transform="rotate(-28 20 20)" fill="#f5b942" />
+            <circle cx="17" cy="18" r="2.1" fill="#fff3d6" />
+          </svg>
+        </span>
+        <span class="header__name">
+          <b>お芋やとろり</b>
+          <em>OIMOYA TORORI</em>
+        </span>
+      </a>
+
+      <nav class="header__nav" aria-label="メインメニュー">
+        <a href="#about">とろりについて</a>
+        <a href="#shop">ネット販売</a>
+        <a href="#schedule">出店予定</a>
+        <a href="#owner">つくる人</a>
+        <a href="#faq">よくある質問</a>
+      </nav>
+
+      <a class="btn btn--sm header__cta" href="#shop">お取り寄せ</a>
+
+      <button class="header__burger" id="burger" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <!-- ============================= ヒーロー ============================= -->
+    <section class="hero" id="top">
+      <div class="hero__bg" aria-hidden="true">
+        <span class="hero__blob hero__blob--1"></span>
+        <span class="hero__blob hero__blob--2"></span>
+      </div>
+
+      <div class="hero__inner">
+        <div class="hero__text">
+          <p class="hero__eyebrow" data-reveal>焼き芋専門 <span>|</span> 東京</p>
+          <h1 class="hero__title" data-reveal>
+            <span>スプーンですくう、</span>
+            <span class="is-accent">蜜の壺。</span>
+          </h1>
+          <p class="hero__lead" id="heroLead" data-reveal></p>
+          <div class="hero__actions" data-reveal>
+            <a class="btn btn--primary" href="#shop">ネットで買う</a>
+            <a class="btn btn--ghost" href="#schedule">次の出店を見る</a>
+          </div>
+          <div class="hero__next" id="heroNext" data-reveal></div>
+        </div>
+
+        <div class="hero__visual" data-reveal>
+          <!-- 写真を用意したら <img src="assets/hero.jpg" alt="..."> に差し替え -->
+          <div class="photo photo--hero" data-photo="assets/hero.jpg">
+            <span class="photo__ph">
+              <b>🍠</b>
+              <em>ここに断面の写真</em>
+              <i>assets/hero.jpg</i>
+            </span>
+          </div>
+          <div class="hero__stamp" aria-hidden="true">
+            <span>低温<br />じっくり</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track" id="marquee"></div>
+      </div>
+    </section>
+
+    <main>
+      <!-- ============================== ABOUT ============================== -->
+      <section class="section section--about" id="about">
+        <div class="wrap">
+          <h2 class="sec-title" data-reveal>
+            <em id="aboutSub"></em>
+            <span id="aboutHeading"></span>
+          </h2>
+
+          <div class="about__grid">
+            <div class="about__body" id="aboutBody" data-reveal></div>
+            <div class="about__photo" data-reveal>
+              <div class="photo photo--tall" data-photo="assets/about.jpg">
+                <span class="photo__ph">
+                  <b>📷</b><em>焼いている様子</em><i>assets/about.jpg</i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <ul class="points" id="points"></ul>
+        </div>
+      </section>
+
+      <!-- ============================== SHOP =============================== -->
+      <section class="section section--shop" id="shop">
+        <div class="wrap">
+          <h2 class="sec-title sec-title--center" data-reveal>
+            <em id="shopSub"></em>
+            <span id="shopHeading"></span>
+          </h2>
+          <p class="sec-lead" id="shopLead" data-reveal></p>
+
+          <ul class="products" id="products"></ul>
+
+          <div class="notes" data-reveal>
+            <h3>お届けについて</h3>
+            <ul id="shopNotes"></ul>
+            <p class="notes__secure">
+              <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+                <path
+                  d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linejoin="round"
+                />
+                <path d="m8.5 12 2.4 2.4L15.8 9.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              決済は Square のセキュアな画面で行われます。カード情報を当店が保持することはありません。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ SCHEDULE ============================= -->
+      <section class="section section--schedule" id="schedule">
+        <div class="wrap">
+          <h2 class="sec-title sec-title--center" data-reveal>
+            <em id="schedSub"></em>
+            <span id="schedHeading"></span>
+          </h2>
+          <p class="sec-lead" id="schedLead" data-reveal></p>
+
+          <ol class="schedule" id="schedule-list"></ol>
+
+          <div class="line-cta" id="lineCta" hidden data-reveal>
+            <div class="line-cta__text">
+              <h3>出店・販売開始のお知らせ</h3>
+              <p>次はいつ・どこに出るのか、LINE でいちばん早くお届けします。</p>
+            </div>
+            <a class="btn btn--line" id="lineBtn" href="#" target="_blank" rel="noopener">
+              LINEで友だち追加
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== HOWTO ============================== -->
+      <section class="section section--howto" id="howto">
+        <div class="wrap">
+          <h2 class="sec-title sec-title--center" data-reveal>
+            <em id="howtoSub"></em>
+            <span id="howtoHeading"></span>
+          </h2>
+          <ul class="howto" id="howto-list"></ul>
+        </div>
+      </section>
+
+      <!-- ============================== OWNER ============================== -->
+      <section class="section section--owner" id="owner">
+        <div class="wrap owner">
+          <div class="owner__photo" data-reveal>
+            <div class="photo photo--round" data-photo="assets/owner.jpg">
+              <span class="photo__ph"><b>🙂</b><em>顔写真</em><i>assets/owner.jpg</i></span>
+            </div>
+          </div>
+          <div class="owner__text" data-reveal>
+            <h2 class="sec-title">
+              <em id="ownerSub"></em>
+              <span id="ownerHeading"></span>
+            </h2>
+            <p class="owner__name"><b id="ownerName"></b><span id="ownerRole"></span></p>
+            <div id="ownerBody"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================== FAQ =============================== -->
+      <section class="section section--faq" id="faq">
+        <div class="wrap wrap--narrow">
+          <h2 class="sec-title sec-title--center" data-reveal>
+            <em id="faqSub"></em>
+            <span id="faqHeading"></span>
+          </h2>
+          <div class="faq" id="faq-list"></div>
+        </div>
+      </section>
+
+      <!-- ============================== LEGAL ============================== -->
+      <section class="section section--legal" id="legal">
+        <div class="wrap wrap--narrow">
+          <details class="doc">
+            <summary id="legalHeading"></summary>
+            <table class="doc__table">
+              <tbody id="legalRows"></tbody>
+            </table>
+          </details>
+          <details class="doc">
+            <summary id="privacyHeading"></summary>
+            <div class="doc__body" id="privacyBody"></div>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================== フッター ============================= -->
+    <footer class="footer">
+      <div class="wrap footer__inner">
+        <p class="footer__catch" id="footerCatch"></p>
+        <ul class="footer__social" id="social"></ul>
+        <p class="footer__copy">© <span id="year"></span> お芋やとろり</p>
+      </div>
+    </footer>
+
+    <!-- スマホ用の固定CTA -->
+    <div class="dock" id="dock">
+      <a class="dock__btn dock__btn--sub" href="#schedule">出店予定</a>
+      <a class="dock__btn dock__btn--main" href="#shop">ネットで買う</a>
+    </div>
+
+    <script src="content.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
