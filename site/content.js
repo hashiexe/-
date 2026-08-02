@@ -104,7 +104,8 @@ const SITE = {
     lead: '天候などにより変更になる場合があります。最新のお知らせは LINE でお届けしています。',
     // Googleスプレッドシートを「ウェブに公開」→ CSV で発行したURL。
     // 空のままなら下の events だけで動作します（従来どおり）。
-    sheetCsvUrl: '',
+    sheetCsvUrl:
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vSLNMCDoq79VzG-nnoLf9CqjLE98ViCuz277dXQ0gtMnJIjmXUatRMlYKzsy1-TZ1V4bV-J81UP0sHD/pub?gid=0&single=true&output=csv',
     events: [
       {
         date: '2026-08-08',
