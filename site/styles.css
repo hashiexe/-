@@ -259,6 +259,10 @@ button {
   padding: 11px 20px;
   font-size: 13px;
 }
+.btn--lg {
+  padding: 19px 40px;
+  font-size: 16px;
+}
 .btn--line {
   background: var(--line-green);
 }
@@ -584,76 +588,37 @@ button {
 .section--shop {
   background: var(--cream-deep);
 }
-.products {
+.shop-cta {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
-  gap: 22px;
-}
-.product {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: 1fr 1.15fr;
+  align-items: stretch;
   background: var(--paper);
   border-radius: var(--r-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-s);
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s;
+  box-shadow: var(--shadow-m);
 }
-.product:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-l);
-}
-.product__thumb {
-  aspect-ratio: 5 / 4;
+.shop-cta__photo {
   position: relative;
-  background: linear-gradient(150deg, #f6dcae, #eec078 45%, #e0b0cc 100%);
+  min-height: 220px;
+  border-radius: 0;
+  box-shadow: none;
+  aspect-ratio: auto;
 }
-.product--purple .product__thumb {
-  background: linear-gradient(150deg, #e6d3ec, #b78fc4 55%, #7b4a86 100%);
-}
-.product--cream .product__thumb {
-  background: linear-gradient(150deg, #fff4de, #f3ddb6 50%, #dcc79b 100%);
-}
-.product__thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.product__badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  padding: 6px 13px;
-  border-radius: 999px;
-  background: rgba(58, 42, 29, 0.86);
-  color: #ffeecb;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  line-height: 1.4;
-  backdrop-filter: blur(4px);
-}
-.product__body {
-  padding: 24px 24px 26px;
+.shop-cta__body {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  gap: 10px;
+  justify-content: center;
+  gap: 26px;
+  padding: clamp(28px, 4vw, 52px);
 }
-.product__name {
+.shop-cta__lead {
   font-family: var(--mincho);
-  font-size: 20px;
-  line-height: 1.5;
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.9;
+  color: var(--char);
 }
-.product__price {
-  font-weight: 700;
-  color: var(--honey-deep);
-  font-size: 17px;
-  letter-spacing: 0.04em;
-}
-.product__desc {
-  font-size: 13.5px;
-  color: var(--ink-soft);
-  flex: 1;
+.shop-cta .btn {
+  align-self: flex-start;
 }
 .notes {
   margin-top: 40px;
@@ -1085,8 +1050,12 @@ button {
     right: 4px;
   }
   .about__grid,
-  .owner {
+  .owner,
+  .shop-cta {
     grid-template-columns: 1fr;
+  }
+  .shop-cta__photo {
+    min-height: 200px;
   }
   .about__photo {
     max-width: 360px;

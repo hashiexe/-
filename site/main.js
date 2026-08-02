@@ -101,27 +101,21 @@
     setText('#shopHeading', s.heading);
     setText('#shopLead', s.lead);
 
-    const ul = $('#products');
-    if (ul) {
-      ul.innerHTML = s.products
-        .map((p, i) => {
-          const ready = !!p.url;
-          const cta = ready
-            ? `<a class="btn btn--primary btn--block" href="${esc(p.url)}" target="_blank" rel="noopener">この商品を買う</a>`
-            : `<span class="btn btn--block" aria-disabled="true">準備中</span>`;
-          return `<li class="product product--${esc(p.theme || 'honey')}" data-reveal style="transition-delay:${i * 70}ms">
-              <div class="product__thumb" data-photo="assets/product-${i + 1}.jpg">
-                ${p.badge ? `<span class="product__badge">${esc(p.badge)}</span>` : ''}
-              </div>
-              <div class="product__body">
-                <h3 class="product__name">${esc(p.name)}</h3>
-                <p class="product__price">${esc(p.price)}</p>
-                <p class="product__desc">${esc(p.desc)}</p>
-                ${cta}
-              </div>
-            </li>`;
-        })
-        .join('');
+    // 商品一覧はサイト側に持たず、Square のオンラインストアへ誘導します。
+    // （価格・在庫・売り切れをここと二重管理しないため）
+    const btn = $('#shopCtaBtn');
+    const cta = $('#shopCta');
+    if (btn && cta) {
+      const ready = !!SITE.links.shopTop;
+      if (ready) {
+        btn.href = SITE.links.shopTop;
+        btn.removeAttribute('aria-disabled');
+        btn.textContent = s.ctaLabel || 'Squareショップで見る・購入する';
+      } else {
+        btn.href = '#';
+        btn.setAttribute('aria-disabled', 'true');
+        btn.textContent = '準備中';
+      }
     }
 
     const notes = $('#shopNotes');
@@ -129,14 +123,69 @@
   }
 
   /* ============================ SCHEDULE ============================ */
-  function renderSchedule() {
-    const s = SITE.scheduleSection;
-    setText('#schedSub', s.subheading);
-    setText('#schedHeading', s.heading);
-    setText('#schedLead', s.lead);
 
+  // 簡易CSVパーサー（ダブルクオートで囲まれたカンマ・改行に対応）
+  function parseCsv(text) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i + 1] === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          field += c;
+        }
+      } else if (c === '"') {
+        inQuotes = true;
+      } else if (c === ',') {
+        row.push(field);
+        field = '';
+      } else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += c;
+      }
+    }
+    if (field !== '' || row.length) {
+      row.push(field);
+      rows.push(row);
+    }
+    return rows.filter((r) => r.some((f) => f.trim() !== ''));
+  }
+
+  // スプレッドシートのCSVを出店イベントの配列に変換する
+  // 1行目はヘッダー行（date, place, area, time, note）で、列の並びは問わない
+  function csvToEvents(text) {
+    const rows = parseCsv(text);
+    if (rows.length < 2) return [];
+    const header = rows[0].map((h) => h.trim().toLowerCase());
+    return rows.slice(1).map((r) => {
+      const e = {};
+      header.forEach((key, i) => {
+        if (key) e[key] = (r[i] || '').trim();
+      });
+      return e;
+    });
+  }
+
+  // events配列を実際にDOMへ描画する（初回のフォールバック表示にも、
+  // スプレッドシート読み込み成功後の差し替えにも、これ1本を使う）
+  function paintSchedule(events) {
+    const s = SITE.scheduleSection;
     const today = todayStart();
-    const upcoming = (s.events || [])
+    const upcoming = (events || [])
       .map((e) => ({ ...e, _d: parseDate(e.date) }))
       .filter((e) => e._d && e._d >= today)
       .sort((a, b) => a._d - b._d);
@@ -172,12 +221,16 @@
 
     // ヒーローの「次回出店」バッジ
     const badge = $('#heroNext');
-    if (badge && upcoming.length) {
-      const n = upcoming[0];
-      badge.innerHTML =
-        `<span class="tag">NEXT</span>` +
-        `<span>${n._d.getMonth() + 1}/${n._d.getDate()}（${DOW[n._d.getDay()]}）` +
-        `<b>${esc(n.place)}</b></span>`;
+    if (badge) {
+      if (upcoming.length) {
+        const n = upcoming[0];
+        badge.innerHTML =
+          `<span class="tag">NEXT</span>` +
+          `<span>${n._d.getMonth() + 1}/${n._d.getDate()}（${DOW[n._d.getDay()]}）` +
+          `<b>${esc(n.place)}</b></span>`;
+      } else {
+        badge.innerHTML = '';
+      }
     }
 
     // LINE CTA（URLが設定されているときだけ出す）
@@ -185,6 +238,39 @@
     if (cta && SITE.links.line) {
       cta.hidden = false;
       $('#lineBtn').href = SITE.links.line;
+    }
+  }
+
+  function renderSchedule() {
+    const s = SITE.scheduleSection;
+    setText('#schedSub', s.subheading);
+    setText('#schedHeading', s.heading);
+    setText('#schedLead', s.lead);
+
+    // まず content.js の events を即時表示（読み込み待ちで画面が
+    // 空白にならないように）。スプレッドシートが設定されていれば、
+    // 取得できしだい静かに差し替える。失敗してもこの表示のまま残る。
+    paintSchedule(s.events);
+
+    if (s.sheetCsvUrl) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 6000);
+      fetch(s.sheetCsvUrl, { signal: controller.signal })
+        .then((res) => (res.ok ? res.text() : Promise.reject(new Error('status ' + res.status))))
+        .then((text) => {
+          const events = csvToEvents(text);
+          if (!events.length) return;
+          paintSchedule(events);
+          // この差し替えは初回のスクロール演出（IntersectionObserver）より
+          // あとに起きるため、新しく挿入された要素は監視対象に入らない。
+          // 消えたままにならないよう、ここで直接表示状態にする。
+          const list = $('#schedule-list');
+          if (list) list.querySelectorAll('[data-reveal]').forEach((n) => n.classList.add('is-in'));
+        })
+        .catch((err) => {
+          console.warn('出店スケジュールの読み込みに失敗しました。バックアップを表示しています。', err);
+        })
+        .finally(() => clearTimeout(timeout));
     }
   }
 
