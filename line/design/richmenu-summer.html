@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>リッチメニュー（夏・4〜9月）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* 冬版（richmenu-winter.html）と同じ 2500 × 1686px・6分割。
+     焼き芋が売れない4〜9月に向けて、冷凍焼き芋・干し芋を主役に差し替えた版です。
+     左上「次の出店」と右下「きいてみる」は冬と共通なので、
+     お客さまはメニューが変わっても迷いません。 */
+  body { width: 2500px; height: 1686px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 833px 833px 834px;
+    grid-template-rows: 843px 843px;
+    width: 2500px;
+    height: 1686px;
+  }
+  .cell { padding: 36px; }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    background: var(--paper);
+    border: 5px solid var(--outline);
+    border-radius: 40px;
+    box-shadow: 0 12px 0 rgba(36, 28, 22, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+  }
+  .card.primary { background: var(--honey); }
+  .card.tint-skin { background: #f6eef8; }
+  .card.tint-cool { background: #eef4f8; }
+  .card.tint-cream { background: var(--cream-deep); }
+
+  .icon { width: 260px; height: 260px; display: block; }
+
+  .label {
+    font-size: 100px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    line-height: 1.1;
+    text-align: center;
+  }
+  .label.small { font-size: 84px; }
+  .sub {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: var(--ink-soft);
+    text-indent: 0.24em;
+  }
+  .card.primary .sub { color: var(--char); }
+</style>
+</head>
+<body class="dots">
+<div class="grid">
+
+  <!-- ───────── 1段目・左：次の出店（冬版と共通） ───────── -->
+  <div class="cell">
+    <div class="card primary">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="8" y="14" width="48" height="42" rx="7" fill="#fffdf9"/>
+        <path d="M8 21a7 7 0 0 1 7-7h34a7 7 0 0 1 7 7v6H8Z" fill="#7b4a86"/>
+        <rect x="8" y="14" width="48" height="42" rx="7" fill="none" stroke="#241c16" stroke-width="3.5"/>
+        <path d="M8 27h48" stroke="#241c16" stroke-width="3" stroke-linecap="round"/>
+        <path d="M20 8v11M44 8v11" stroke="#241c16" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="21" cy="38" r="3.2" fill="#3a2a1d"/>
+        <circle cx="32" cy="38" r="3.2" fill="#3a2a1d"/>
+        <circle cx="43" cy="38" r="6" fill="#e8a020" stroke="#241c16" stroke-width="3"/>
+        <circle cx="21" cy="48" r="3.2" fill="#3a2a1d"/>
+        <circle cx="32" cy="48" r="3.2" fill="#3a2a1d"/>
+      </svg>
+      <div class="label">次の出店</div>
+      <div class="sub">SCHEDULE</div>
+    </div>
+  </div>
+
+  <!-- ───────── 1段目・中：冷凍焼き芋・干し芋（Squareストアへ） ───────── -->
+  <div class="cell">
+    <div class="card tint-cool">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <!-- 干し芋のスティック3本 -->
+        <rect x="10" y="22" width="13" height="32" rx="6" fill="#dda23c" stroke="#241c16" stroke-width="3.2" transform="rotate(-9 16.5 38)"/>
+        <rect x="25.5" y="18" width="13" height="36" rx="6" fill="#e8a020" stroke="#241c16" stroke-width="3.2"/>
+        <rect x="41" y="22" width="13" height="32" rx="6" fill="#dda23c" stroke="#241c16" stroke-width="3.2" transform="rotate(9 47.5 38)"/>
+        <!-- 冷たさの印（雪の結晶） -->
+        <g fill="none" stroke="#5b8fbf" stroke-width="3.2" stroke-linecap="round">
+          <path d="M48 6v18M39.5 10.5l17 9M56.5 10.5l-17 9"/>
+          <path d="M48 12l-4-4M48 12l4-4M48 19l-4 4M48 19l4 4"/>
+        </g>
+      </svg>
+      <div class="label small">冷凍焼き芋<br>干し芋</div>
+      <div class="sub">ONLINE STORE</div>
+    </div>
+  </div>
+
+  <!-- ───────── 1段目・右：ショップカード（冬版と共通） ───────── -->
+  <div class="cell">
+    <div class="card tint-cream">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="5" y="17" width="54" height="30" rx="7" fill="#fffdf9" stroke="#241c16" stroke-width="3.5"/>
+        <circle cx="14" cy="32" r="4.4" fill="#e8a020" stroke="#241c16" stroke-width="2.6"/>
+        <circle cx="23" cy="32" r="4.4" fill="#e8a020" stroke="#241c16" stroke-width="2.6"/>
+        <circle cx="32" cy="32" r="4.4" fill="#e8a020" stroke="#241c16" stroke-width="2.6"/>
+        <circle cx="41" cy="32" r="4.4" fill="#f1e9db" stroke="#c3b8a4" stroke-width="2.6"/>
+        <circle cx="50" cy="32" r="4.4" fill="#f1e9db" stroke="#c3b8a4" stroke-width="2.6"/>
+        <path d="M46 50l4 4 8-9" fill="none" stroke="#6f8f5a" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="label">ショップ<br>カード</div>
+      <div class="sub">POINT CARD</div>
+    </div>
+  </div>
+
+  <!-- ───────── 2段目・左：凍らせて食べる（サイトの #howto へ） ───────── -->
+  <div class="cell">
+    <div class="card">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <!-- アイスバーにした焼き芋 -->
+        <rect x="18" y="8" width="28" height="38" rx="13" fill="#e8a020" stroke="#241c16" stroke-width="3.5"/>
+        <path d="M24 18q4 3 8 0t8 0" fill="none" stroke="#fffdf9" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+        <rect x="28.5" y="44" width="7" height="14" rx="3.5" fill="#e9d4b0" stroke="#241c16" stroke-width="3"/>
+        <!-- ひんやりの印 -->
+        <g fill="none" stroke="#5b8fbf" stroke-width="3" stroke-linecap="round">
+          <path d="M53 16v12M48 18.5l10 7M58 18.5l-10 7"/>
+        </g>
+      </svg>
+      <div class="label small">凍らせて<br>食べる</div>
+      <div class="sub">HOW TO EAT</div>
+    </div>
+  </div>
+
+  <!-- ───────── 2段目・中：とろりのこと（サイトの #about へ）
+       ※ ロードマップの「犬用お菓子の開発（s-dev2）」がクリアになったら、
+          このセルを下のコメント内「わんちゃんおやつ」版と差し替えてください。
+          リンク先も Square の該当商品ページに変更します。 ───────── -->
+  <div class="cell">
+    <div class="card tint-skin">
+      <!-- いものすけ（design/imonosuke.svg と同じパス） -->
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><clipPath id="imono-s"><path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z"/></clipPath></defs>
+        <g clip-path="url(#imono-s)">
+          <rect width="64" height="64" fill="#f6e03a"/>
+          <path d="M11 40q7-4 14 0t14 0q7-4 14 0v18H11Z" fill="#8c4fe3"/>
+          <g fill="#5b2ba6">
+            <ellipse cx="19" cy="47" rx="1" ry="1.9" transform="rotate(20 19 47)"/>
+            <ellipse cx="27" cy="50" rx="1" ry="1.9" transform="rotate(-15 27 50)"/>
+            <ellipse cx="35" cy="47" rx="1" ry="1.9" transform="rotate(18 35 47)"/>
+            <ellipse cx="43" cy="50" rx="1" ry="1.9" transform="rotate(-20 43 50)"/>
+          </g>
+        </g>
+        <path d="M11 40q7-4 14 0t14 0q7-4 14 0" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity=".5" stroke-linecap="round"/>
+        <path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="25.5" cy="29" r="2.1" fill="#241c16"/>
+        <circle cx="36.5" cy="29" r="2.1" fill="#241c16"/>
+        <path d="M27 34h8M31 34v7" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M27 34h8M31 34v7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+          <path d="M26 7q-2.3-1.5 0-3t0-3"/><path d="M31 7q-2.3-1.5 0-3t0-3"/><path d="M36 7q-2.3-1.5 0-3t0-3"/>
+        </g>
+      </svg>
+      <div class="label">とろりの<br>こと</div>
+      <div class="sub">ABOUT</div>
+    </div>
+  </div>
+  <!-- 差し替え用：わんちゃんおやつ（s-dev2 クリア後にこの中身を上のカードと入れ替える）
+  <div class="card tint-cream">
+    <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+      <ellipse cx="32" cy="44" rx="14" ry="11" fill="#e8a020" stroke="#241c16" stroke-width="3.2"/>
+      <ellipse cx="16" cy="28" rx="5.6" ry="7.4" fill="#e8a020" stroke="#241c16" stroke-width="3.2"/>
+      <ellipse cx="26" cy="20" rx="5.6" ry="7.4" fill="#e8a020" stroke="#241c16" stroke-width="3.2"/>
+      <ellipse cx="38" cy="20" rx="5.6" ry="7.4" fill="#e8a020" stroke="#241c16" stroke-width="3.2"/>
+      <ellipse cx="48" cy="28" rx="5.6" ry="7.4" fill="#e8a020" stroke="#241c16" stroke-width="3.2"/>
+    </svg>
+    <div class="label small">わんちゃん<br>おやつ</div>
+    <div class="sub">FOR DOGS</div>
+  </div>
+  -->
+
+  <!-- ───────── 2段目・右：きいてみる（冬版と共通） ───────── -->
+  <div class="cell">
+    <div class="card">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M12 12h40a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H30L18 54V44h-6a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z" fill="#fffdf9" stroke="#241c16" stroke-width="3.5" stroke-linejoin="round"/>
+        <circle cx="21" cy="28" r="3.4" fill="#e8a020"/>
+        <circle cx="32" cy="28" r="3.4" fill="#e8a020"/>
+        <circle cx="43" cy="28" r="3.4" fill="#e8a020"/>
+      </svg>
+      <div class="label">きいて<br>みる</div>
+      <div class="sub">ASK US</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

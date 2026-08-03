@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>リッチメニュー（冬・10〜3月）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* LINEリッチメニュー「大」6分割：2500 × 1686px
+     タップ領域の境界は x=833 / x=1666、y=843 に固定されています。
+     カードの余白はセルの内側にあるので、見た目を変えても
+     タップ領域とはズレません。 */
+  body { width: 2500px; height: 1686px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 833px 833px 834px;
+    grid-template-rows: 843px 843px;
+    width: 2500px;
+    height: 1686px;
+  }
+  .cell { padding: 36px; }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    background: var(--paper);
+    border: 5px solid var(--outline);
+    border-radius: 40px;
+    box-shadow: 0 12px 0 rgba(36, 28, 22, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+  }
+  /* 主役のセル（次の出店）だけ蜜色にして視線を集める */
+  .card.primary { background: var(--honey); }
+  .card.tint-skin { background: #f6eef8; }
+  .card.tint-cream { background: var(--cream-deep); }
+
+  .icon { width: 260px; height: 260px; display: block; }
+
+  .label {
+    font-size: 100px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    line-height: 1.1;
+    text-align: center;
+  }
+  .sub {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: var(--ink-soft);
+    text-indent: 0.24em;
+  }
+  .card.primary .sub { color: var(--char); }
+</style>
+</head>
+<body class="dots">
+<div class="grid">
+
+  <!-- ───────── 1段目・左：次の出店（サイトの #schedule へ） ───────── -->
+  <div class="cell">
+    <div class="card primary">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="8" y="14" width="48" height="42" rx="7" fill="#fffdf9"/>
+        <path d="M8 21a7 7 0 0 1 7-7h34a7 7 0 0 1 7 7v6H8Z" fill="#7b4a86"/>
+        <rect x="8" y="14" width="48" height="42" rx="7" fill="none" stroke="#241c16" stroke-width="3.5"/>
+        <path d="M8 27h48" stroke="#241c16" stroke-width="3" stroke-linecap="round"/>
+        <path d="M20 8v11M44 8v11" stroke="#241c16" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="21" cy="38" r="3.2" fill="#3a2a1d"/>
+        <circle cx="32" cy="38" r="3.2" fill="#3a2a1d"/>
+        <circle cx="43" cy="38" r="6" fill="#e8a020" stroke="#241c16" stroke-width="3"/>
+        <circle cx="21" cy="48" r="3.2" fill="#3a2a1d"/>
+        <circle cx="32" cy="48" r="3.2" fill="#3a2a1d"/>
+      </svg>
+      <div class="label">次の出店</div>
+      <div class="sub">SCHEDULE</div>
+    </div>
+  </div>
+
+  <!-- ───────── 1段目・中：おうちに届ける（Squareストアへ） ───────── -->
+  <div class="cell">
+    <div class="card">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="9" y="26" width="46" height="28" rx="5" fill="#e9d4b0" stroke="#241c16" stroke-width="3.5"/>
+        <rect x="6" y="16" width="52" height="12" rx="4" fill="#f7ead6" stroke="#241c16" stroke-width="3.5"/>
+        <path d="M32 28v26" stroke="#241c16" stroke-width="3" stroke-linecap="round"/>
+        <rect x="25" y="9" width="14" height="10" rx="3" fill="#e8a020" stroke="#241c16" stroke-width="3.5"/>
+      </svg>
+      <div class="label">おうちに<br>届ける</div>
+      <div class="sub">ONLINE STORE</div>
+    </div>
+  </div>
+
+  <!-- ───────── 1段目・右：ショップカード ───────── -->
+  <div class="cell">
+    <div class="card tint-cream">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="5" y="17" width="54" height="30" rx="7" fill="#fffdf9" stroke="#241c16" stroke-width="3.5"/>
+        <circle cx="14" cy="32" r="4.4" fill="#e8a020" stroke="#241c16" stroke-width="2.6"/>
+        <circle cx="23" cy="32" r="4.4" fill="#e8a020" stroke="#241c16" stroke-width="2.6"/>
+        <circle cx="32" cy="32" r="4.4" fill="#e8a020" stroke="#241c16" stroke-width="2.6"/>
+        <circle cx="41" cy="32" r="4.4" fill="#f1e9db" stroke="#c3b8a4" stroke-width="2.6"/>
+        <circle cx="50" cy="32" r="4.4" fill="#f1e9db" stroke="#c3b8a4" stroke-width="2.6"/>
+        <path d="M46 50l4 4 8-9" fill="none" stroke="#6f8f5a" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="label">ショップ<br>カード</div>
+      <div class="sub">POINT CARD</div>
+    </div>
+  </div>
+
+  <!-- ───────── 2段目・左：おいしい食べ方（サイトの #howto へ） ───────── -->
+  <div class="cell">
+    <div class="card">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#241c16" stroke-width="2.6" stroke-linecap="round" opacity=".8">
+          <path d="M24 14q-2.4-1.6 0-3.2t0-3.2"/>
+          <path d="M32 13q-2.4-1.6 0-3.2t0-3.2"/>
+          <path d="M40 14q-2.4-1.6 0-3.2t0-3.2"/>
+        </g>
+        <ellipse cx="32" cy="35" rx="23" ry="15" fill="#7b4a86" stroke="#241c16" stroke-width="3.5"/>
+        <ellipse cx="32" cy="35" rx="17" ry="10" fill="#f6e03a" stroke="#241c16" stroke-width="2.4" stroke-opacity=".45"/>
+        <path d="M32 45q-4.5 6.5 0 9.5 4.5-3 0-9.5Z" fill="#e8a020" stroke="#241c16" stroke-width="2.8"/>
+      </svg>
+      <div class="label">おいしい<br>食べ方</div>
+      <div class="sub">HOW TO EAT</div>
+    </div>
+  </div>
+
+  <!-- ───────── 2段目・中：とろりのこと（サイトの #about へ） ───────── -->
+  <div class="cell">
+    <div class="card tint-skin">
+      <!-- いものすけ（design/imonosuke.svg と同じパス） -->
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><clipPath id="imono-w"><path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z"/></clipPath></defs>
+        <g clip-path="url(#imono-w)">
+          <rect width="64" height="64" fill="#f6e03a"/>
+          <path d="M11 40q7-4 14 0t14 0q7-4 14 0v18H11Z" fill="#8c4fe3"/>
+          <g fill="#5b2ba6">
+            <ellipse cx="19" cy="47" rx="1" ry="1.9" transform="rotate(20 19 47)"/>
+            <ellipse cx="27" cy="50" rx="1" ry="1.9" transform="rotate(-15 27 50)"/>
+            <ellipse cx="35" cy="47" rx="1" ry="1.9" transform="rotate(18 35 47)"/>
+            <ellipse cx="43" cy="50" rx="1" ry="1.9" transform="rotate(-20 43 50)"/>
+          </g>
+        </g>
+        <path d="M11 40q7-4 14 0t14 0q7-4 14 0" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity=".5" stroke-linecap="round"/>
+        <path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="25.5" cy="29" r="2.1" fill="#241c16"/>
+        <circle cx="36.5" cy="29" r="2.1" fill="#241c16"/>
+        <path d="M27 34h8M31 34v7" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M27 34h8M31 34v7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+          <path d="M26 7q-2.3-1.5 0-3t0-3"/><path d="M31 7q-2.3-1.5 0-3t0-3"/><path d="M36 7q-2.3-1.5 0-3t0-3"/>
+        </g>
+      </svg>
+      <div class="label">とろりの<br>こと</div>
+      <div class="sub">ABOUT</div>
+    </div>
+  </div>
+
+  <!-- ───────── 2段目・右：きいてみる（テキスト「質問」を送信） ───────── -->
+  <div class="cell">
+    <div class="card">
+      <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M12 12h40a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H30L18 54V44h-6a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z" fill="#fffdf9" stroke="#241c16" stroke-width="3.5" stroke-linejoin="round"/>
+        <circle cx="21" cy="28" r="3.4" fill="#e8a020"/>
+        <circle cx="32" cy="28" r="3.4" fill="#e8a020"/>
+        <circle cx="43" cy="28" r="3.4" fill="#e8a020"/>
+      </svg>
+      <div class="label">きいて<br>みる</div>
+      <div class="sub">ASK US</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

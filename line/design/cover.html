@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>プロフィール カバー画像（1080×878）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* LINE公式アカウントのプロフィール カバー画像：1080 × 878px
+
+     ★重要★
+     プロフィール画面では、カバー画像の「左下」にプロフィール写真の丸と
+     アカウント名が重なって表示されます。
+     そのため、この面では下端 240px と左下を意図的に空けています。
+     写真に差し替えるときも、この余白のルールは守ってください。 */
+  body { width: 1080px; height: 878px; }
+
+  .cover {
+    width: 1080px;
+    height: 878px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 下 250px は、プロフィール写真の丸とアカウント名が重なる場所。
+       ここには何も置かないよう padding で確保しています。 */
+    padding: 80px 70px 250px;
+  }
+
+  /* 上下に焼き色のグラデーションを敷いて、写真に差し替えても
+     文字が読める構図をあらかじめ作っておく */
+  .cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 253, 249, 0.55) 0%, rgba(255, 253, 249, 0) 38%);
+    pointer-events: none;
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 34px;
+  }
+  .mark svg { width: 96px; height: 96px; }
+  .mark .name {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--skin);
+  }
+  .mark .name small {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.34em;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  .tagline {
+    font-size: 86px;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    line-height: 1.32;
+    text-align: center;
+    color: var(--ink);
+    text-shadow: 3px 4px 0 rgba(232, 160, 32, 0.35);
+  }
+
+  .lead {
+    margin-top: 30px;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.85;
+    text-align: center;
+    color: var(--char);
+  }
+
+  /* LINEでできることを1行で。確保した下端の余白のすぐ上に置きます */
+  .strip {
+    margin-top: auto;
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+  }
+  .chip {
+    background: var(--paper);
+    border: 4px solid var(--outline);
+    border-radius: 999px;
+    padding: 12px 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    box-shadow: 0 6px 0 rgba(36, 28, 22, 0.10);
+  }
+  .chip.honey { background: var(--honey); }
+</style>
+</head>
+<body class="dots">
+<div class="cover">
+
+  <div class="mark">
+    <!-- いものすけ（design/imonosuke.svg と同じパス） -->
+    <svg viewBox="0 0 64 64" aria-label="いものすけ">
+      <defs><clipPath id="imono-c"><path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z"/></clipPath></defs>
+      <g clip-path="url(#imono-c)">
+        <rect width="64" height="64" fill="#f6e03a"/>
+        <path d="M11 40q7-4 14 0t14 0q7-4 14 0v18H11Z" fill="#8c4fe3"/>
+        <g fill="#5b2ba6">
+          <ellipse cx="19" cy="47" rx="1" ry="1.9" transform="rotate(20 19 47)"/>
+          <ellipse cx="27" cy="50" rx="1" ry="1.9" transform="rotate(-15 27 50)"/>
+          <ellipse cx="35" cy="47" rx="1" ry="1.9" transform="rotate(18 35 47)"/>
+          <ellipse cx="43" cy="50" rx="1" ry="1.9" transform="rotate(-20 43 50)"/>
+        </g>
+      </g>
+      <path d="M11 40q7-4 14 0t14 0q7-4 14 0" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity=".5" stroke-linecap="round"/>
+      <path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="25.5" cy="29" r="2.1" fill="#241c16"/>
+      <circle cx="36.5" cy="29" r="2.1" fill="#241c16"/>
+      <path d="M27 34h8M31 34v7" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M27 34h8M31 34v7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+        <path d="M26 7q-2.3-1.5 0-3t0-3"/><path d="M31 7q-2.3-1.5 0-3t0-3"/><path d="M36 7q-2.3-1.5 0-3t0-3"/>
+      </g>
+    </svg>
+    <div class="name">
+      お芋やとろり
+      <small>OIMOYA TORORI</small>
+    </div>
+  </div>
+
+  <div class="tagline">スプーンですくう、<br>蜜の壺。</div>
+
+  <div class="lead">
+    低温でじっくり、時間だけがつくる甘さ。<br>
+    出店のお知らせは、ここでいちばん早くお届けします。
+  </div>
+
+  <div class="strip">
+    <div class="chip honey">出店のお知らせ</div>
+    <div class="chip">冷凍でおうちにも</div>
+    <div class="chip">ポイントカード</div>
+  </div>
+
+</div>
+</body>
+</html>

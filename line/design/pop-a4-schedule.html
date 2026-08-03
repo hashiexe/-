@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>掲示POP A4（出店予定はLINEで）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* A4（210 × 297mm）縦。テントの支柱やのぼりの脇に貼って、
+     少し離れた場所からでも読めるように文字を大きくしています。
+     クリアファイルに入れて画鋲やクリップで留めるのが手軽です。 */
+  @page { size: 210mm 297mm; margin: 0; }
+  /* overflow を visible にしておくと、1枚に収まらなくなったとき PDFが2ページになり、
+     build.mjs が警告してくれます。 */
+  body { width: 210mm; height: 297mm; overflow: visible; }
+
+  .sheet {
+    width: 210mm;
+    height: 297mm;
+    padding: 16mm 14mm 12mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .brand { display: flex; align-items: center; gap: 5mm; }
+  .brand svg { width: 18mm; height: 18mm; }
+  .brand .name { font-size: 10mm; font-weight: 900; letter-spacing: .05em; color: var(--skin); }
+
+  .headline {
+    margin-top: 8mm;
+    font-size: 21mm;
+    font-weight: 900;
+    line-height: 1.22;
+    letter-spacing: .01em;
+    color: var(--ink);
+    text-shadow: 1.6mm 1.8mm 0 rgba(232, 160, 32, .38);
+  }
+
+  .sub {
+    margin-top: 6mm;
+    font-size: 7mm;
+    font-weight: 700;
+    line-height: 1.75;
+    color: var(--char);
+  }
+
+  .qr {
+    position: relative;
+    width: 88mm;
+    height: 88mm;
+    margin-top: 9mm;
+    background: #fff;
+    border: 1.6mm solid var(--outline);
+    border-radius: 5mm;
+    box-shadow: 0 3mm 0 rgba(36, 28, 22, .14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .qr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+  .qr-hint { font-size: 4.4mm; line-height: 1.7; color: var(--ink-soft); padding: 6mm; }
+  .qr-hint code { font-size: 4mm; }
+
+  .qr-caption {
+    margin-top: 4mm;
+    font-size: 7mm;
+    font-weight: 900;
+    color: var(--line-green);
+    letter-spacing: .03em;
+  }
+
+  /* 中身の予告リスト */
+  .list {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+  .item {
+    background: var(--paper);
+    border: 1.1mm solid var(--outline);
+    border-radius: 999px;
+    padding: 3.4mm 6mm;
+    font-size: 6mm;
+    font-weight: 700;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+  }
+  .item .dot {
+    width: 5mm; height: 5mm; border-radius: 50%;
+    background: var(--honey);
+    border: .9mm solid var(--outline);
+    flex: none;
+  }
+</style>
+</head>
+<body class="dots">
+<div class="sheet">
+
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-label="いものすけ">
+      <defs><clipPath id="im-a4"><path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z"/></clipPath></defs>
+      <g clip-path="url(#im-a4)">
+        <rect width="64" height="64" fill="#f6e03a"/>
+        <path d="M11 40q7-4 14 0t14 0q7-4 14 0v18H11Z" fill="#8c4fe3"/>
+      </g>
+      <path d="M11 40q7-4 14 0t14 0q7-4 14 0" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity=".5" stroke-linecap="round"/>
+      <path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="25.5" cy="29" r="2.1" fill="#241c16"/><circle cx="36.5" cy="29" r="2.1" fill="#241c16"/>
+      <path d="M27 34h8M31 34v7" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M27 34h8M31 34v7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+        <path d="M26 7q-2.3-1.5 0-3t0-3"/><path d="M31 7q-2.3-1.5 0-3t0-3"/><path d="M36 7q-2.3-1.5 0-3t0-3"/>
+      </g>
+    </svg>
+    <div class="name">お芋やとろり</div>
+  </div>
+
+  <div class="headline">次の出店は<br>LINEで</div>
+  <div class="sub">お店を持たないので、次にお会いできる場所は<br>LINEでいちばん早くお知らせしています。</div>
+
+  <div class="qr">
+    <div class="qr-hint">
+      ここにQRコードが入ります<br>
+      LINE公式アカウントマネージャーで<br>
+      QRコードをダウンロードして<br>
+      <code>line/assets/qr-friend.png</code><br>
+      に置いてください
+    </div>
+    <img src="../assets/qr-friend.png" alt="" onerror="this.remove()">
+  </div>
+  <div class="qr-caption">カメラで読み取ってください</div>
+
+  <div class="list">
+    <div class="item"><span class="dot"></span>今月どこに出るか、すぐ分かります</div>
+    <div class="item"><span class="dot"></span>冷凍焼き芋のお取り寄せもこちらから</div>
+    <div class="item"><span class="dot"></span>5回で焼き芋1本プレゼントのポイントカード</div>
+  </div>
+
+</div>
+</body>
+</html>

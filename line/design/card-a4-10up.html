@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>名刺サイズカード A4・10面付け（お持ち帰り用）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* A4（210 × 297mm）に、名刺サイズ（91 × 55mm）を 2列 × 5段 = 10枚。
+     お会計のときに商品の袋へ1枚入れて、おうちに帰ってから
+     友だち追加してもらうためのカードです。
+     （その場で追加してもらう用は pop-a5-friend.html）
+
+     余白：左右 14mm / 上下 11mm。うすいグレーの線が裁断の目安です。
+     厚紙（0.2mm 前後のマット紙）に印刷すると扱いやすくなります。 */
+  @page { size: 210mm 297mm; margin: 0; }
+  /* overflow を visible にしておくと、1枚に収まらなくなったとき PDFが2ページになり、
+     build.mjs が警告してくれます。 */
+  body { width: 210mm; height: 297mm; background: #fff; overflow: visible; }
+
+  .sheet {
+    width: 210mm;
+    height: 297mm;
+    padding: 11mm 14mm;
+    display: grid;
+    grid-template-columns: 91mm 91mm;
+    grid-template-rows: repeat(5, 55mm);
+  }
+
+  .card {
+    width: 91mm;
+    height: 55mm;
+    outline: 0.2mm solid #d8d0c2; /* 裁断ガイド */
+    background-color: var(--cream);
+    background-image:
+      radial-gradient(#efe0be 1px, transparent 1.2px),
+      radial-gradient(#efe0be 1px, transparent 1.2px);
+    background-size: 6mm 6mm, 6mm 6mm;
+    background-position: 0 0, 3mm 3mm;
+    display: flex;
+    align-items: center;
+    gap: 3.5mm;
+    padding: 4mm 4.5mm;
+  }
+
+  .left { flex: 1; display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 2mm; }
+  .brand svg { width: 7mm; height: 7mm; flex: none; }
+  .brand .name { font-size: 4.6mm; font-weight: 900; letter-spacing: .04em; color: var(--skin); }
+
+  .msg {
+    margin-top: 2.4mm;
+    font-size: 5.4mm;
+    font-weight: 900;
+    line-height: 1.32;
+    color: var(--ink);
+  }
+  .msg em { font-style: normal; color: var(--honey-deep); }
+
+  .bullets {
+    margin: 2.4mm 0 0;
+    padding: 0;
+    list-style: none; /* 印を自前の丸（::before）に置き換えます */
+    font-size: 3.1mm;
+    line-height: 1.62;
+    color: var(--char);
+    font-weight: 500;
+  }
+  .bullets li { position: relative; padding-left: 3.2mm; }
+  .bullets li::before {
+    content: '';
+    position: absolute; left: 0; top: 1.5mm;
+    width: 1.6mm; height: 1.6mm; border-radius: 50%;
+    background: var(--honey);
+  }
+
+  .right { width: 30mm; display: flex; flex-direction: column; align-items: center; }
+  .qr {
+    position: relative;
+    width: 30mm;
+    height: 30mm;
+    background: #fff;
+    border: .7mm solid var(--outline);
+    border-radius: 2mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .qr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+  .qr-hint { font-size: 2.4mm; line-height: 1.5; color: var(--ink-soft); text-align: center; padding: 1.5mm; }
+  .qr-caption {
+    margin-top: 1.6mm;
+    font-size: 3.1mm;
+    font-weight: 900;
+    color: var(--line-green);
+    letter-spacing: .02em;
+  }
+</style>
+</head>
+<body>
+
+<!-- いものすけを1回だけ定義して、10枚のカードから使い回します -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="imonosuke" viewBox="0 0 64 64">
+    <clipPath id="im-card"><path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z"/></clipPath>
+    <g clip-path="url(#im-card)">
+      <rect width="64" height="64" fill="#f6e03a"/>
+      <path d="M11 40q7-4 14 0t14 0q7-4 14 0v18H11Z" fill="#8c4fe3"/>
+    </g>
+    <path d="M11 40q7-4 14 0t14 0q7-4 14 0" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity=".5" stroke-linecap="round"/>
+    <path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+    <circle cx="25.5" cy="29" r="2.1" fill="#241c16"/><circle cx="36.5" cy="29" r="2.1" fill="#241c16"/>
+    <path d="M27 34h8M31 34v7" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M27 34h8M31 34v7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+      <path d="M26 7q-2.3-1.5 0-3t0-3"/><path d="M31 7q-2.3-1.5 0-3t0-3"/><path d="M36 7q-2.3-1.5 0-3t0-3"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="sheet" id="sheet"></div>
+
+<script>
+  /* 同じカードを10枚並べます。文言を直すときは、この中の1か所だけ直せば
+     10枚ぜんぶに反映されます。 */
+  const CARD = `
+    <div class="card">
+      <div class="left">
+        <div class="brand">
+          <svg><use href="#imonosuke"></use></svg>
+          <div class="name">お芋やとろり</div>
+        </div>
+        <div class="msg">おうちで<em>食べ方</em>に<br>迷ったら</div>
+        <ul class="bullets">
+          <li>いちばんおいしい温め方</li>
+          <li>次の出店の日にちと場所</li>
+          <li>冷凍焼き芋のお取り寄せ</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="qr">
+          <div class="qr-hint">assets/<br>qr-friend.png<br>を置いてください</div>
+          <img src="../assets/qr-friend.png" alt="" onerror="this.remove()">
+        </div>
+        <div class="qr-caption">LINEで見る</div>
+      </div>
+    </div>`;
+  document.getElementById('sheet').innerHTML = CARD.repeat(10);
+</script>
+</body>
+</html>

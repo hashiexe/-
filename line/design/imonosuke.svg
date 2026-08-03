@@ -1,0 +1,46 @@
+<!-- いものすけ — 焼き芋の妖精。
+     src/components/Mascot.tsx と同じパス定義をそのまま書き出したもの。
+     上半分=黄色（中身）／下半分=紫の皮（種のポツポツ）、点目にT字の口、頭から湯気。
+     Mascot.tsx を直したら、このファイルも同じ値に合わせてください。 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="いものすけ">
+  <defs>
+    <clipPath id="imono-body">
+      <path d="M31 9 C19 9 12 20 12 33 C12 46 19 57 30 57 C41 57 52 48 52 34 C52 20 44 9 31 9 Z" />
+    </clipPath>
+  </defs>
+
+  <!-- からだ（黄色）＋皮（紫）を body でクリップ -->
+  <g clip-path="url(#imono-body)">
+    <rect x="0" y="0" width="64" height="64" fill="#f6e03a" />
+    <path d="M11 40 Q18 36 25 40 Q32 44 39 40 Q46 36 53 40 L53 58 L11 58 Z" fill="#8c4fe3" />
+    <!-- 皮の種（ポツポツ） -->
+    <g fill="#5b2ba6">
+      <ellipse cx="19" cy="47" rx="1" ry="1.9" transform="rotate(20 19 47)" />
+      <ellipse cx="27" cy="50" rx="1" ry="1.9" transform="rotate(-15 27 50)" />
+      <ellipse cx="35" cy="47" rx="1" ry="1.9" transform="rotate(18 35 47)" />
+      <ellipse cx="43" cy="50" rx="1" ry="1.9" transform="rotate(-20 43 50)" />
+      <ellipse cx="23" cy="54" rx="1" ry="1.8" transform="rotate(10 23 54)" />
+      <ellipse cx="39" cy="54" rx="1" ry="1.8" transform="rotate(-10 39 54)" />
+    </g>
+  </g>
+
+  <!-- 中身と皮の境目 -->
+  <path d="M11 40 Q18 36 25 40 Q32 44 39 40 Q46 36 53 40" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" />
+  <!-- 本体の輪郭 -->
+  <path d="M31 9 C19 9 12 20 12 33 C12 46 19 57 30 57 C41 57 52 48 52 34 C52 20 44 9 31 9 Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round" />
+
+  <!-- 目 -->
+  <circle cx="25.5" cy="29" r="2.1" fill="#241c16" />
+  <circle cx="36.5" cy="29" r="2.1" fill="#241c16" />
+
+  <!-- 口（T字） -->
+  <path d="M27 34 H35 M31 34 V41" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M27 34 H35 M31 34 V41" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- 湯気 -->
+  <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+    <path d="M26 7 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3" />
+    <path d="M31 7 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3" />
+    <path d="M36 7 q-2.3 -1.5 0 -3 q2.3 -1.5 0 -3" />
+  </g>
+</svg>

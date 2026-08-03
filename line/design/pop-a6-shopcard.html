@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>レジ横POP A6（ショップカード ポイント付与）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* A6（105 × 148mm）縦。お会計の場所に立てて、
+     お客さまに読み取ってもらうためのポイント付与用QRです。
+
+     ★ここに貼るQRは「友だち追加用」ではなく「ポイント付与用」です。
+       LINE公式アカウントマネージャー → ショップカード → 「ポイント付与用QRコード」
+       からダウンロードして line/assets/qr-point.png に置いてください。
+     ★「5回で1本」「1会計1ポイント」は仮置きです。
+       line/入力項目リスト.md で確定させてから印刷してください。 */
+  @page { size: 105mm 148mm; margin: 0; }
+  /* overflow を visible にしておくと、1枚に収まらなくなったとき PDFが2ページになり、
+     build.mjs が警告してくれます。 */
+  body { width: 105mm; height: 148mm; overflow: visible; }
+
+  .sheet {
+    width: 105mm;
+    height: 148mm;
+    padding: 9mm 8mm 8mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 4mm;
+    font-weight: 700;
+    letter-spacing: .22em;
+    color: var(--ink-soft);
+    text-indent: .22em;
+  }
+  .headline {
+    margin-top: 2mm;
+    font-size: 10mm;
+    font-weight: 900;
+    line-height: 1.22;
+    color: var(--ink);
+    text-shadow: .9mm 1mm 0 rgba(232, 160, 32, .38);
+  }
+
+  /* スタンプの見本（5個ためると1本） */
+  .stamps {
+    margin-top: 5mm;
+    display: flex;
+    align-items: center;
+    gap: 2.2mm;
+  }
+  .stamp {
+    width: 8mm; height: 8mm; border-radius: 50%;
+    border: .9mm solid var(--outline);
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stamp.filled { background: var(--honey); }
+  .stamp svg { width: 5.4mm; height: 5.4mm; }
+  .arrow { font-size: 5mm; font-weight: 900; color: var(--ink-soft); }
+  .gift {
+    background: var(--skin);
+    color: #fff;
+    border: .9mm solid var(--outline);
+    border-radius: 999px;
+    padding: 1.8mm 3.4mm;
+    font-size: 3.8mm;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .rule {
+    margin-top: 4.5mm;
+    font-size: 4.4mm;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--char);
+  }
+
+  .qr {
+    position: relative;
+    width: 52mm;
+    height: 52mm;
+    margin-top: 5mm;
+    background: #fff;
+    border: 1.2mm solid var(--outline);
+    border-radius: 3.5mm;
+    box-shadow: 0 2mm 0 rgba(36, 28, 22, .14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .qr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+  .qr-hint { font-size: 3mm; line-height: 1.6; color: var(--ink-soft); padding: 3mm; }
+  .qr-hint code { font-size: 2.8mm; }
+
+  .qr-caption {
+    margin-top: 2.5mm;
+    font-size: 4.6mm;
+    font-weight: 900;
+    color: var(--line-green);
+  }
+
+  .foot {
+    margin-top: auto;
+    font-size: 3.4mm;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body class="dots">
+<div class="sheet">
+
+  <div class="eyebrow">OIMOYA TORORI</div>
+  <div class="headline">ポイントカード<br>はじめました</div>
+
+  <div class="stamps">
+    <div class="stamp filled">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 34l12 12 24-26" fill="none" stroke="#241c16" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="stamp filled">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 34l12 12 24-26" fill="none" stroke="#241c16" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="stamp"></div>
+    <div class="stamp"></div>
+    <div class="stamp"></div>
+    <div class="arrow">▶</div>
+    <div class="gift">焼き芋1本</div>
+  </div>
+
+  <div class="rule">1回のお会計で 1ポイント<br>5ポイントで焼き芋1本プレゼント</div>
+
+  <div class="qr">
+    <div class="qr-hint">
+      ここにポイント付与用の<br>QRコードが入ります<br>
+      ショップカードの管理画面から<br>ダウンロードして<br>
+      <code>line/assets/qr-point.png</code><br>
+      に置いてください
+    </div>
+    <img src="../assets/qr-point.png" alt="" onerror="this.remove()">
+  </div>
+  <div class="qr-caption">読み取ってポイントGET</div>
+
+  <div class="foot">
+    まだ友だち追加がお済みでない方は、<br>読み取ると同時に追加できます。
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>卓上POP A5（友だち追加）</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* A5（148 × 210mm）縦。出店テントのレジ横に立てて使います。
+     ★「50円引き」の金額は仮置きです。line/入力項目リスト.md で確定させてから印刷してください。 */
+  @page { size: 148mm 210mm; margin: 0; }
+  /* overflow を visible にしておくと、文言を増やしすぎて1枚に収まらなくなったとき
+     PDFが2ページになります。build.mjs がそれを見つけて警告します。 */
+  body { width: 148mm; height: 210mm; overflow: visible; }
+
+  .sheet {
+    width: 148mm;
+    height: 210mm;
+    padding: 12mm 10mm 10mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .brand { flex: none; display: flex; align-items: center; gap: 4mm; }
+  .brand svg { width: 13mm; height: 13mm; }
+  .brand .name { font-size: 7.5mm; font-weight: 900; letter-spacing: .05em; color: var(--skin); }
+
+  .lead {
+    margin-top: 5mm;
+    font-size: 5mm;
+    font-weight: 700;
+    color: var(--char);
+    letter-spacing: .04em;
+  }
+
+  .headline {
+    margin-top: 2.5mm;
+    font-size: 12mm;
+    font-weight: 900;
+    line-height: 1.22;
+    letter-spacing: .02em;
+    color: var(--ink);
+    text-shadow: 1mm 1.2mm 0 rgba(232, 160, 32, .38);
+  }
+
+  /* 特典の札 */
+  .offer {
+    flex: none;
+    margin-top: 5mm;
+    background: var(--honey);
+    border: 1.4mm solid var(--outline);
+    border-radius: 6mm;
+    box-shadow: 0 2.2mm 0 rgba(36, 28, 22, .16);
+    padding: 4mm 7mm;
+    transform: rotate(-1.4deg);
+  }
+  .offer .small { font-size: 4.2mm; font-weight: 700; color: var(--char); }
+  .offer .big { font-size: 9mm; font-weight: 900; line-height: 1.25; color: var(--ink); white-space: nowrap; }
+  .offer .big em { font-style: normal; font-size: 13mm; }
+
+  /* QRコード枠 */
+  .qr {
+    flex: none;
+    position: relative;
+    width: 48mm;
+    height: 48mm;
+    margin-top: 5mm;
+    background: #fff;
+    border: 1.2mm dashed var(--ink-soft);
+    border-radius: 4mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .qr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+  .qr-hint { font-size: 3mm; line-height: 1.6; color: var(--ink-soft); padding: 3mm; }
+  .qr-hint code { font-size: 2.8mm; }
+
+  .qr-caption {
+    margin-top: 2.5mm;
+    font-size: 4.6mm;
+    font-weight: 900;
+    color: var(--line-green);
+    letter-spacing: .03em;
+  }
+
+  .foot {
+    margin-top: auto;
+    padding-top: 3mm;
+    font-size: 3.8mm;
+    line-height: 1.8;
+    color: var(--char);
+    font-weight: 500;
+  }
+  .foot strong { font-weight: 900; }
+</style>
+</head>
+<body class="dots">
+<div class="sheet">
+
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-label="いものすけ">
+      <defs><clipPath id="im-a5"><path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z"/></clipPath></defs>
+      <g clip-path="url(#im-a5)">
+        <rect width="64" height="64" fill="#f6e03a"/>
+        <path d="M11 40q7-4 14 0t14 0q7-4 14 0v18H11Z" fill="#8c4fe3"/>
+      </g>
+      <path d="M11 40q7-4 14 0t14 0q7-4 14 0" fill="none" stroke="#241c16" stroke-width="1.5" stroke-opacity=".5" stroke-linecap="round"/>
+      <path d="M31 9C19 9 12 20 12 33s7 24 18 24 22-9 22-23S44 9 31 9Z" fill="none" stroke="#241c16" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="25.5" cy="29" r="2.1" fill="#241c16"/><circle cx="36.5" cy="29" r="2.1" fill="#241c16"/>
+      <path d="M27 34h8M31 34v7" fill="none" stroke="#241c16" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M27 34h8M31 34v7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="none" stroke="#241c16" stroke-width="1.7" stroke-linecap="round">
+        <path d="M26 7q-2.3-1.5 0-3t0-3"/><path d="M31 7q-2.3-1.5 0-3t0-3"/><path d="M36 7q-2.3-1.5 0-3t0-3"/>
+      </g>
+    </svg>
+    <div class="name">お芋やとろり</div>
+  </div>
+
+  <div class="lead">次いつ出るの？ は</div>
+  <div class="headline">LINEで<br>お知らせします</div>
+
+  <div class="offer">
+    <div class="small">いま友だち追加してくれた方に</div>
+    <div class="big">焼き芋 1本<br><em>50円引き</em></div>
+    <div class="small">この場で使えます</div>
+  </div>
+
+  <div class="qr">
+    <div class="qr-hint">
+      ここにQRコードが入ります<br>
+      LINE公式アカウントマネージャーで<br>
+      QRコードをダウンロードして<br>
+      <code>line/assets/qr-friend.png</code><br>
+      に置いてください
+    </div>
+    <img src="../assets/qr-friend.png" alt="" onerror="this.remove()">
+  </div>
+  <div class="qr-caption">カメラで読み取ってください</div>
+
+  <div class="foot">
+    出店予定・おいしい食べ方・冷凍のお取り寄せも<br>
+    <strong>ぜんぶLINEから見られます</strong>
+  </div>
+
+</div>
+</body>
+</html>

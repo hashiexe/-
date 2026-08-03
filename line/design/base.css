@@ -1,0 +1,74 @@
+/* =====================================================================
+   お芋やとろり — LINE公式アカウント用デザイン素材 共通スタイル
+   ---------------------------------------------------------------------
+   色は site/styles.css の :root と同じ値に揃えています。
+   ブランドカラーを変えるときは、ここと site/styles.css の両方を直します。
+
+   書体について：
+   Mac で開くと Hiragino Maru Gothic ProN（＝とろりの標準書体）が使われ、
+   入っていない環境では Google Fonts の Zen Maru Gothic が使われます。
+   どちらも丸ゴシックなので、見た目はほぼ同じになります。
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap');
+
+:root {
+  /* --- 色（site/styles.css 準拠） ---------------------------------- */
+  --cream: #fdf6ea; /* 背景 */
+  --cream-deep: #f7ead6; /* 背景（段差） */
+  --paper: #fffdf9; /* カード面 */
+  --ink: #3a2a1d; /* 本文 */
+  --ink-soft: #7a6857; /* 補助テキスト */
+  --honey: #e8a020; /* 蜜色（主役） */
+  --honey-deep: #c97f10;
+  --skin: #7b4a86; /* 芋の皮の紫 */
+  --skin-soft: #a97fb3;
+  --char: #5a3620; /* 焼き色 */
+  --leaf: #6f8f5a;
+  --line-green: #06c755; /* LINEブランドカラー */
+
+  /* --- 輪郭（いものすけと同じ黒） ---------------------------------- */
+  --outline: #241c16;
+
+  /* --- 書体 -------------------------------------------------------- */
+  --maru: 'Hiragino Maru Gothic ProN', 'Zen Maru Gothic', 'Yu Gothic', 'Hiragino Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--maru);
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+}
+
+/* とろりロード（アプリ）と同じ、クリーム地に細かい水玉の背景 */
+.dots {
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(#efe0be 1.4px, transparent 1.6px),
+    radial-gradient(#efe0be 1.4px, transparent 1.6px);
+  background-size: 34px 34px, 34px 34px;
+  background-position: 0 0, 17px 17px;
+}
+
+/* いものすけ・アイコン共通：手描き風の太い黒フチ */
+.stroke {
+  fill: none;
+  stroke: var(--outline);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
