@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>整体院・整骨院向けホームページ制作サービス（制作事例）</title>
+<meta name="description" content="整体院・整骨院に特化したホームページ制作サービスのご案内と制作事例。広告規制に配慮した文章表現と、来院前の不安を解消する構成で制作します。">
+<style>
+  :root {
+    --color-primary: #1c7a84;
+    --color-primary-dark: #145a62;
+    --color-accent: #f5a623;
+    --color-bg-alt: #eef3f4;
+    --color-text: #253238;
+    --color-text-light: #5b6b72;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text);
+    background: #fff;
+    overflow-x: hidden;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  header.hero {
+    background: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #fff;
+    padding: 56px 0;
+    text-align: center;
+  }
+  header.hero h1 { font-size: 1.7rem; margin: 0 0 12px; }
+  header.hero p { color: #dff0f1; max-width: 560px; margin: 0 auto; }
+  section { padding: 40px 0; }
+  section.alt { background: var(--color-bg-alt); }
+  h2 { font-size: 1.35rem; text-align: center; margin-bottom: 24px; }
+  .points { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .points { grid-template-columns: repeat(3, 1fr); } }
+  .point-card {
+    background: #fff;
+    border: 1px solid #dde5e6;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .point-card h3 { margin-top: 0; font-size: 1.05rem; color: var(--color-primary-dark); }
+  .case-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #dde5e6;
+    border-radius: 10px;
+    padding: 24px;
+    text-decoration: none;
+    color: var(--color-text);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .case-card:hover { border-color: var(--color-primary); }
+  .case-card .case-tag {
+    display: inline-block;
+    background: var(--color-bg-alt);
+    color: var(--color-primary-dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .case-card h3 { margin: 0 0 8px; font-size: 1.2rem; color: var(--color-text); }
+  .case-card p { color: var(--color-text-light); margin: 0 0 12px; font-size: 0.95rem; }
+  .case-card .case-cta { color: var(--color-primary-dark); font-weight: 700; }
+  footer {
+    background: #1a3438;
+    color: #cfe3e5;
+    padding: 24px 0;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>整体院・整骨院に特化した<br>ホームページ制作</h1>
+    <p>来院前の不安を順番に解消する構成と、柔道整復師法・あはき法の広告規制に配慮した文章表現で、成果につながるサイトを制作します。</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>制作の特徴</h2>
+    <div class="points">
+      <div class="point-card">
+        <h3>広告規制に対応</h3>
+        <p>整骨院・整体院特有の広告規制を理解した上で、安心して公開できる表現でコンテンツを制作します。</p>
+      </div>
+      <div class="point-card">
+        <h3>スマホ優先設計</h3>
+        <p>来院検討者の多くがスマホで閲覧することを前提に、電話・予約への導線を最適化します。</p>
+      </div>
+      <div class="point-card">
+        <h3>症状別ページで集客</h3>
+        <p>症状名と地域名を軸にしたページ構成で、ローカル検索からの流入を狙います。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="cases">
+  <div class="container">
+    <h2>制作事例</h2>
+    <a class="case-card" href="samples/seitai-full/">
+      <span class="case-tag">整体院・整骨院</span>
+      <h3>整体院サンプルサイト（全5ページ）</h3>
+      <p>トップ／症状別（腰痛）／料金・施術の流れ／院・院長紹介／アクセス・予約の5ページ構成。広告規制チェックリストに対応した文章表現、スマホ固定CVバー、LocalBusiness構造化データを実装しています。</p>
+      <span class="case-cta">サンプルサイトを見る →</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>掲載している制作事例はすべて営業用サンプルです。実在の院・企業ではありません。</p>
+  </div>
+</footer>
+
+</body>
+</html>
