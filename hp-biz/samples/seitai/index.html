@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まちだ整体院｜腰痛・肩こり・姿勢改善｜◯◯駅徒歩5分</title>
+<meta name="description" content="まちだ整体院は国家資格者による施術院です。腰痛・肩こり・頭痛の根本改善を、丁寧な検査と説明から。初回カウンセリング30分。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1d2b36;--bg:#fff;--tint:#f2f7f8;--brand:#1c7a84;--brand-d:#14616a;--sub:#5e6f7a;--line:#dfe8eb;--warm:#f5a623}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.85;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{font-size:19px;font-weight:700;letter-spacing:.04em;color:var(--brand);white-space:nowrap}
+.logo small{display:block;font-size:10px;color:var(--sub);letter-spacing:.14em;font-weight:400}
+.nav ul{display:flex;gap:24px;list-style:none;margin-left:auto}
+.nav a{color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:500}
+.nav a:hover{color:var(--brand)}
+.tel-btn{background:var(--brand);color:#fff!important;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;text-decoration:none;white-space:nowrap}
+@media(max-width:860px){.nav ul{display:none}}
+.hero{background:linear-gradient(180deg,var(--tint),#fff);padding:62px 0 70px}
+.hero-in{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center}
+@media(max-width:860px){.hero-in{grid-template-columns:1fr;gap:30px}}
+.badge{display:inline-block;background:var(--warm);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:4px;margin-bottom:20px}
+.hero h1{font-size:clamp(25px,4.6vw,40px);font-weight:900;line-height:1.55;letter-spacing:.01em}
+.hero h1 em{font-style:normal;color:var(--brand);border-bottom:4px solid var(--warm);padding-bottom:2px}
+.hero .chk{list-style:none;margin:28px 0 0;display:grid;gap:11px}
+.hero .chk li{font-size:15.5px;font-weight:500;padding-left:30px;position:relative}
+.hero .chk li::before{content:"✓";position:absolute;left:0;top:0;width:21px;height:21px;background:var(--brand);color:#fff;border-radius:50%;font-size:12px;display:grid;place-items:center;margin-top:5px}
+.hero-img{aspect-ratio:4/3;background:linear-gradient(140deg,#cfe3e6,#9fc6cc);border-radius:10px;display:grid;place-items:center;color:#4c7d85;font-size:13px;letter-spacing:.14em}
+.btns{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:16px 30px;border-radius:7px;text-decoration:none;font-size:15px;font-weight:700;transition:.2s;text-align:center}
+.btn-p{background:var(--warm);color:#fff;box-shadow:0 3px 0 #d18d12}
+.btn-p:hover{background:#e59b1f}
+.btn-s{background:#fff;border:2px solid var(--brand);color:var(--brand)}
+.btn-s:hover{background:var(--tint)}
+section{padding:78px 0}
+.sec-h{text-align:center;margin-bottom:50px}
+.sec-h h2{font-size:clamp(21px,3.4vw,30px);font-weight:900;letter-spacing:.02em}
+.sec-h p{color:var(--sub);font-size:14.5px;margin-top:12px}
+.sym{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:18px}
+.sym a{display:block;background:var(--tint);border:1px solid var(--line);border-radius:9px;padding:28px 22px;text-decoration:none;color:inherit;transition:.2s}
+.sym a:hover{border-color:var(--brand);transform:translateY(-3px)}
+.sym h3{font-size:16.5px;font-weight:700;margin-bottom:10px;color:var(--brand)}
+.sym p{font-size:13.5px;color:var(--sub);line-height:1.85}
+.flow{background:var(--tint)}
+.steps{display:grid;gap:16px;max-width:740px;margin:0 auto}
+.step{background:#fff;border-radius:9px;padding:24px 26px;display:grid;grid-template-columns:52px 1fr;gap:20px;align-items:start}
+.step .n{width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900;font-size:17px}
+.step h3{font-size:16.5px;font-weight:700;margin-bottom:6px}
+.step p{font-size:14px;color:var(--sub)}
+.p-tbl{max-width:700px;margin:0 auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+.p-tbl th,.p-tbl td{padding:17px 14px;border-bottom:1px solid var(--line);text-align:left}
+.p-tbl td:last-child{text-align:right;white-space:nowrap;font-weight:700}
+.p-tbl tr.hl{background:#fff7e9}
+.p-tbl small{display:block;font-size:12.5px;color:var(--sub);font-weight:400}
+.voice{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
+.v{background:#fff;border:1px solid var(--line);border-radius:9px;padding:28px 24px}
+.stars{color:var(--warm);font-size:15px;letter-spacing:.14em;margin-bottom:12px}
+.v p{font-size:14px;color:var(--sub);margin-bottom:16px}
+.v .who{font-size:13px;font-weight:700}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+@media(max-width:800px){.info-grid{grid-template-columns:1fr;gap:30px}}
+.info-grid th{width:96px;color:var(--sub);font-weight:500;font-size:14px;padding:14px 0;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.info-grid td{padding:14px 0;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:top}
+.map{width:100%;height:100%;min-height:300px;border:0;border-radius:9px;filter:grayscale(.2)}
+form{display:grid;gap:17px;max-width:600px;margin:0 auto}
+label{font-size:13.5px;font-weight:700;display:block;margin-bottom:7px}
+input,select,textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:7px;font-family:inherit;font-size:15px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:-1px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+button{padding:18px;background:var(--warm);color:#fff;border:0;border-radius:7px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 3px 0 #d18d12}
+.fixed{position:fixed;left:0;right:0;bottom:0;z-index:70;display:none;gap:1px;background:var(--line)}
+.fixed a{flex:1;padding:15px;text-align:center;text-decoration:none;font-weight:700;font-size:14.5px}
+@media(max-width:760px){.fixed{display:flex}body{padding-bottom:54px}}
+footer{background:var(--ink);color:#9fb2bd;padding:46px 0 38px;text-align:center;font-size:13px}
+footer .logo{color:#fff;margin-bottom:14px;display:inline-block}
+.note{margin-top:14px;font-size:11.5px;color:#6b8290}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+<div class="logo">まちだ整体院<small>KOKKA SHIKAKU / SINCE 2012</small></div>
+<nav><ul>
+<li><a href="#symptom">お悩み</a></li><li><a href="#flow">施術の流れ</a></li>
+<li><a href="#price">料金</a></li><li><a href="#info">アクセス</a></li>
+</ul></nav>
+<a href="tel:0000000000" class="tel-btn">☎ 00-0000-0000</a>
+</div></header>
+
+<div class="hero"><div class="wrap hero-in">
+  <div>
+    <span class="badge">初回限定 カウンセリング30分＋施術 3,980円</span>
+    <h1>その腰痛、<em>もう繰り返さない</em>ために。</h1>
+    <ul class="chk">
+      <li>国家資格（柔道整復師）を持つ院長が最初から最後まで担当</li>
+      <li>痛みの出ている場所ではなく、原因となる部位を検査</li>
+      <li>ボキボキしない、力任せでない施術</li>
+      <li>完全予約制だから待ち時間ゼロ</li>
+    </ul>
+    <div class="btns">
+      <a href="#reserve" class="btn btn-p">初回予約をとる</a>
+      <a href="tel:0000000000" class="btn btn-s">電話で相談する</a>
+    </div>
+  </div>
+  <div class="hero-img">施術風景の写真</div>
+</div></div>
+
+<section id="symptom"><div class="wrap">
+  <div class="sec-h"><h2>こんなお悩みはありませんか</h2><p>当院に多くご相談いただく症状です。あてはまるものがあればご相談ください。</p></div>
+  <div class="sym">
+    <a href="#reserve"><h3>腰痛・ぎっくり腰</h3><p>長時間のデスクワークや繰り返す腰の痛み。骨盤と股関節のバランスから検査します。</p></a>
+    <a href="#reserve"><h3>肩こり・首の痛み</h3><p>マッサージをしてもすぐ戻る肩こり。多くは姿勢と呼吸に原因があります。</p></a>
+    <a href="#reserve"><h3>頭痛・めまい</h3><p>薬が手放せない緊張型頭痛。首まわりの筋緊張をゆるめることで変化が出ます。</p></a>
+    <a href="#reserve"><h3>産後の骨盤の歪み</h3><p>産後2ヶ月以降から施術可能。お子さま連れでのご来院も歓迎しています。</p></a>
+    <a href="#reserve"><h3>スポーツ障害</h3><p>膝・足首・肩の痛み。競技復帰までの計画を一緒に立てます。</p></a>
+    <a href="#reserve"><h3>姿勢改善・猫背</h3><p>見た目の印象だけでなく、疲れやすさにも関わります。写真で変化を記録します。</p></a>
+  </div>
+</div></section>
+
+<section class="flow" id="flow"><div class="wrap">
+  <div class="sec-h"><h2>初回の流れ</h2><p>はじめてでも安心いただけるよう、順を追ってご説明します（約60分）</p></div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div><h3>カウンセリング（15分）</h3><p>いつから、どんなときに痛むのか。お仕事や生活習慣も含めて詳しく伺います。</p></div></div>
+    <div class="step"><div class="n">2</div><div><h3>検査・姿勢分析（15分）</h3><p>可動域の検査と姿勢の撮影を行い、痛みの原因がどこにあるかを特定します。</p></div></div>
+    <div class="step"><div class="n">3</div><div><h3>説明（10分）</h3><p>検査結果を画像でお見せしながら、原因と施術方針、通院の目安をご説明します。</p></div></div>
+    <div class="step"><div class="n">4</div><div><h3>施術（20分）</h3><p>ボキボキしない手技で、原因となっている部位を中心に調整します。</p></div></div>
+    <div class="step"><div class="n">5</div><div><h3>セルフケアのご案内</h3><p>ご自宅でできるストレッチを2〜3つお伝えします。動画でもお送りします。</p></div></div>
+  </div>
+</div></section>
+
+<section id="price"><div class="wrap">
+  <div class="sec-h"><h2>料金</h2><p>表示価格はすべて税込です。回数券の強引な販売は一切いたしません。</p></div>
+  <div class="p-tbl"><table>
+    <tr class="hl"><td><strong>初回</strong><small>カウンセリング＋検査＋施術（約60分）</small></td><td>3,980円</td></tr>
+    <tr><td>2回目以降<small>施術（約40分）</small></td><td>6,600円</td></tr>
+    <tr><td>産後骨盤ケア<small>お子さま同伴可</small></td><td>7,150円</td></tr>
+    <tr><td>スポーツコンディショニング<small>競技復帰プラン付き</small></td><td>8,250円</td></tr>
+    <tr><td>学生割引<small>高校生以下・学生証をご提示ください</small></td><td>4,400円</td></tr>
+  </table></div>
+</div></section>
+
+<section class="flow"><div class="wrap">
+  <div class="sec-h"><h2>患者さまの声</h2></div>
+  <div class="voice">
+    <div class="v"><div class="stars">★★★★★</div><p>10年以上悩んでいた腰痛が、3回目でかなり楽になりました。なぜ痛むのかを図で説明してもらえたのが一番よかったです。</p><div class="who">40代・男性／会社員</div></div>
+    <div class="v"><div class="stars">★★★★★</div><p>産後の骨盤が気になって通いはじめました。子どもを連れて行っても嫌な顔ひとつされず、毎回助かっています。</p><div class="who">30代・女性／育休中</div></div>
+    <div class="v"><div class="stars">★★★★★</div><p>ボキボキされるのが怖くて整体を避けていましたが、ここは本当に痛くありません。頭痛薬を飲む回数が減りました。</p><div class="who">50代・女性／パート</div></div>
+  </div>
+</div></section>
+
+<section id="info"><div class="wrap">
+  <div class="sec-h"><h2>アクセス</h2></div>
+  <div class="info-grid">
+    <table>
+      <tr><th>院名</th><td>まちだ整体院</td></tr>
+      <tr><th>住所</th><td>〒000-0000<br>東京都◯◯市◯◯ 3-5-7 ◯◯ビル2F</td></tr>
+      <tr><th>電話</th><td><a href="tel:0000000000" style="color:inherit">00-0000-0000</a></td></tr>
+      <tr><th>受付時間</th><td>平日 9:00〜20:00<br>土曜 9:00〜17:00</td></tr>
+      <tr><th>休診日</th><td>日曜・祝日</td></tr>
+      <tr><th>アクセス</th><td>◯◯駅 東口より徒歩5分</td></tr>
+      <tr><th>駐車場</th><td>2台あり（無料）</td></tr>
+    </table>
+    <iframe class="map" loading="lazy" title="院の地図"
+      src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%A7%85&output=embed"></iframe>
+  </div>
+</div></section>
+
+<section class="flow" id="reserve"><div class="wrap">
+  <div class="sec-h"><h2>ご予約・ご相談</h2><p>ご記入いただいた内容をもとに、当日ご連絡いたします。</p></div>
+  <form onsubmit="event.preventDefault();this.querySelector('button').textContent='送信しました（デモ）'">
+    <div class="row2">
+      <div><label for="n">お名前</label><input id="n" required placeholder="山田 花子"></div>
+      <div><label for="t">お電話番号</label><input id="t" type="tel" required placeholder="090-0000-0000"></div>
+    </div>
+    <div class="row2">
+      <div><label for="d">ご希望日</label><input id="d" type="date" required></div>
+      <div><label for="s">お悩みの箇所</label>
+        <select id="s"><option>腰</option><option>肩・首</option><option>頭痛・めまい</option><option>産後の骨盤</option><option>膝・足首</option><option>その他</option></select>
+      </div>
+    </div>
+    <div><label for="m">症状について（任意）</label><textarea id="m" rows="4" placeholder="いつ頃から、どんなときに痛むかをお書きください"></textarea></div>
+    <button type="submit">この内容で予約する</button>
+  </form>
+</div></section>
+
+<div class="fixed">
+  <a href="tel:0000000000" style="background:var(--brand);color:#fff">☎ 電話する</a>
+  <a href="#reserve" style="background:var(--warm);color:#fff">予約する</a>
+</div>
+
+<footer>
+  <span class="logo">まちだ整体院</span><br>
+  東京都◯◯市◯◯ 3-5-7 ／ 00-0000-0000
+  <div class="note">※ これはホームページ制作のサンプルです。実在の院ではありません。</div>
+</footer>
+</body>
+</html>

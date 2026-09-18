@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>炭火家 とり松 | 地元で50年の焼き鳥店</title>
+<meta name="description" content="炭火家 とり松は創業50年の焼き鳥店。備長炭で焼き上げる地鶏と、店主が選ぶ日本酒をご用意しています。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16130f;--paper:#f7f3ec;--gold:#b8924a;--sub:#6b6259;--line:#e0d8cb}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.8;-webkit-font-smoothing:antialiased}
+.mincho{font-family:"Shippori Mincho",serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:50;background:rgba(22,19,15,.94);backdrop-filter:blur(8px)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{color:var(--paper);font-size:19px;letter-spacing:.14em;font-weight:700}
+.logo span{color:var(--gold)}
+.nav ul{display:flex;gap:26px;list-style:none}
+.nav a{color:#d8d0c4;text-decoration:none;font-size:13.5px;letter-spacing:.08em}
+.nav a:hover{color:var(--gold)}
+@media(max-width:720px){.nav ul{display:none}}
+.hero{position:relative;min-height:74vh;display:grid;place-items:center;text-align:center;
+background:linear-gradient(rgba(16,13,10,.62),rgba(16,13,10,.72)),
+radial-gradient(1200px 500px at 50% 0%,#5b3a1c,#1a1310);color:var(--paper);padding:80px 20px}
+.hero .tag{color:var(--gold);letter-spacing:.34em;font-size:12px;margin-bottom:22px}
+.hero h1{font-size:clamp(30px,6.4vw,58px);line-height:1.45;font-weight:700;letter-spacing:.05em}
+.hero p{margin-top:24px;color:#cfc6b8;font-size:15px}
+.btns{margin-top:38px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:15px 34px;border-radius:2px;text-decoration:none;font-size:14.5px;letter-spacing:.09em;font-weight:500;transition:.2s}
+.btn-p{background:var(--gold);color:#1a1310}
+.btn-p:hover{background:#c9a35b}
+.btn-s{border:1px solid rgba(255,255,255,.45);color:var(--paper)}
+.btn-s:hover{background:rgba(255,255,255,.1)}
+section{padding:84px 0}
+.sec-h{text-align:center;margin-bottom:54px}
+.sec-h .en{color:var(--gold);font-size:11.5px;letter-spacing:.3em;display:block;margin-bottom:12px}
+.sec-h h2{font-size:clamp(23px,3.6vw,32px);letter-spacing:.09em}
+.lead{text-align:center;max-width:640px;margin:0 auto;color:var(--sub);font-size:15px}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;background:var(--line);border:1px solid var(--line)}
+.m-cat{background:var(--paper);padding:34px 28px}
+.m-cat h3{font-size:17px;letter-spacing:.1em;margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--gold);display:inline-block}
+.m-row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:14.5px}
+.m-row .p{color:var(--sub);white-space:nowrap}
+.about{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.about-in{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:800px){.about-in{grid-template-columns:1fr;gap:34px}}
+.about h2{font-size:clamp(22px,3.4vw,30px);line-height:1.7;letter-spacing:.08em;margin-bottom:24px}
+.about p{color:var(--sub);font-size:15px;margin-bottom:16px}
+.ph{aspect-ratio:4/3;background:linear-gradient(135deg,#3a2a1a,#7a5a33);display:grid;place-items:center;color:#d9c7a8;font-size:12.5px;letter-spacing:.2em}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+@media(max-width:800px){.info-grid{grid-template-columns:1fr;gap:34px}}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{padding:15px 0;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{width:88px;color:var(--sub);font-weight:500}
+.map{width:100%;height:100%;min-height:310px;border:0;filter:grayscale(.25)}
+form{display:grid;gap:18px;max-width:620px;margin:0 auto}
+label{font-size:13.5px;font-weight:500;display:block;margin-bottom:7px}
+input,select,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:15px;border-radius:2px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:-1px;border-color:transparent}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+button{padding:16px;background:var(--ink);color:var(--paper);border:0;font-family:inherit;font-size:15px;letter-spacing:.1em;cursor:pointer;border-radius:2px;transition:.2s}
+button:hover{background:#2e2721}
+footer{background:var(--ink);color:#9b9186;padding:52px 0 40px;text-align:center;font-size:13px}
+footer .logo{margin-bottom:18px;display:block;font-size:17px}
+.note{margin-top:14px;font-size:11.5px;color:#6d655c}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+<div class="logo mincho">炭火家 <span>とり松</span></div>
+<nav><ul>
+<li><a href="#menu">お品書き</a></li><li><a href="#about">当店について</a></li>
+<li><a href="#info">店舗情報</a></li><li><a href="#reserve">ご予約</a></li>
+</ul></nav>
+</div></header>
+
+<div class="hero">
+  <div>
+    <span class="tag">SINCE 1975</span>
+    <h1 class="mincho">備長炭の香りと、<br>店主が選ぶ一杯を。</h1>
+    <p>創業五十年、地元で愛されてきた焼き鳥の店</p>
+    <div class="btns">
+      <a href="#reserve" class="btn btn-p">席を予約する</a>
+      <a href="#menu" class="btn btn-s">お品書きを見る</a>
+    </div>
+  </div>
+</div>
+
+<section id="menu"><div class="wrap">
+  <div class="sec-h"><span class="en">MENU</span><h2 class="mincho">お品書き</h2></div>
+  <div class="menu-grid">
+    <div class="m-cat">
+      <h3 class="mincho">焼き鳥</h3>
+      <div class="m-row"><span>もも串（塩・たれ）</span><span class="p">220円</span></div>
+      <div class="m-row"><span>ねぎま</span><span class="p">240円</span></div>
+      <div class="m-row"><span>つくね（月見）</span><span class="p">280円</span></div>
+      <div class="m-row"><span>せせり</span><span class="p">260円</span></div>
+      <div class="m-row"><span>白レバー</span><span class="p">320円</span></div>
+      <div class="m-row"><span>おまかせ五本盛り</span><span class="p">1,280円</span></div>
+    </div>
+    <div class="m-cat">
+      <h3 class="mincho">一品料理</h3>
+      <div class="m-row"><span>自家製ポテトサラダ</span><span class="p">480円</span></div>
+      <div class="m-row"><span>鶏スープの茶碗蒸し</span><span class="p">420円</span></div>
+      <div class="m-row"><span>だし巻き玉子</span><span class="p">580円</span></div>
+      <div class="m-row"><span>季節の刺身盛り</span><span class="p">1,480円</span></div>
+      <div class="m-row"><span>鶏白湯ラーメン</span><span class="p">780円</span></div>
+    </div>
+    <div class="m-cat">
+      <h3 class="mincho">お飲み物</h3>
+      <div class="m-row"><span>生ビール（中）</span><span class="p">580円</span></div>
+      <div class="m-row"><span>ハイボール</span><span class="p">480円</span></div>
+      <div class="m-row"><span>日本酒（店主厳選）</span><span class="p">680円〜</span></div>
+      <div class="m-row"><span>焼酎各種</span><span class="p">520円〜</span></div>
+      <div class="m-row"><span>ソフトドリンク</span><span class="p">320円</span></div>
+    </div>
+  </div>
+  <p class="lead" style="margin-top:34px">表示価格は税込です。仕入れにより一部メニューが変わることがございます。</p>
+</div></section>
+
+<section class="about" id="about"><div class="wrap about-in">
+  <div class="ph">店内写真</div>
+  <div>
+    <h2 class="mincho">五十年、<br>炭の前に立ち続けて。</h2>
+    <p>昭和五十年の開業以来、備長炭にこだわり続けてきました。強い遠赤外線で一気に焼き上げることで、外は香ばしく、中は驚くほどやわらかく仕上がります。</p>
+    <p>鶏は契約農家から毎朝届くものだけを使い、串打ちは開店前にすべて手作業で。仕込みに手を抜かないことが、五十年続いた理由だと思っています。</p>
+    <p>カウンター八席、テーブル四卓。おひとりでも、ご家族でも、気兼ねなくお立ち寄りください。</p>
+  </div>
+</div></section>
+
+<section id="info"><div class="wrap">
+  <div class="sec-h"><span class="en">ACCESS</span><h2 class="mincho">店舗情報</h2></div>
+  <div class="info-grid">
+    <div>
+      <table>
+        <tr><th>店名</th><td>炭火家 とり松</td></tr>
+        <tr><th>住所</th><td>〒000-0000<br>東京都◯◯区◯◯ 1-2-3 ◯◯ビル1F</td></tr>
+        <tr><th>電話</th><td><a href="tel:0000000000" style="color:inherit">00-0000-0000</a></td></tr>
+        <tr><th>営業時間</th><td>17:00 〜 23:30（L.O. 23:00）</td></tr>
+        <tr><th>定休日</th><td>日曜・第3月曜</td></tr>
+        <tr><th>席数</th><td>カウンター8席／テーブル16席</td></tr>
+        <tr><th>お支払い</th><td>現金・各種カード・QR決済</td></tr>
+      </table>
+    </div>
+    <iframe class="map" loading="lazy" title="店舗の地図"
+      src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%A7%85&output=embed"></iframe>
+  </div>
+</div></section>
+
+<section id="reserve" style="background:#fff;border-top:1px solid var(--line)"><div class="wrap">
+  <div class="sec-h"><span class="en">RESERVATION</span><h2 class="mincho">ご予約</h2></div>
+  <p class="lead" style="margin-bottom:40px">4名様以上でご予約の場合は、お電話でのご連絡をおすすめしております。</p>
+  <form onsubmit="event.preventDefault();this.querySelector('button').textContent='送信しました（デモ）'">
+    <div class="row2">
+      <div><label for="n">お名前</label><input id="n" required placeholder="山田 太郎"></div>
+      <div><label for="t">お電話番号</label><input id="t" type="tel" required placeholder="090-0000-0000"></div>
+    </div>
+    <div class="row2">
+      <div><label for="d">ご来店日</label><input id="d" type="date" required></div>
+      <div><label for="p">人数</label>
+        <select id="p"><option>1名</option><option>2名</option><option>3名</option><option>4名</option><option>5名以上</option></select>
+      </div>
+    </div>
+    <div><label for="m">ご要望（任意）</label><textarea id="m" rows="4" placeholder="カウンター席希望、アレルギーなど"></textarea></div>
+    <button type="submit">この内容で予約する</button>
+  </form>
+</div></section>
+
+<footer>
+  <span class="logo mincho">炭火家 <span style="color:var(--gold)">とり松</span></span>
+  東京都◯◯区◯◯ 1-2-3 ／ 00-0000-0000<br>
+  <div class="note">※ これはホームページ制作のサンプルです。実在の店舗ではありません。</div>
+</footer>
+</body>
+</html>

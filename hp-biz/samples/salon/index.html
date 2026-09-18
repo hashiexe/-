@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hair salon LUCE｜駅徒歩3分のプライベートサロン</title>
+<meta name="description" content="hair salon LUCEは完全予約制のプライベート美容室。ひとりの時間を大切にしたい方へ、丁寧なカウンセリングとパーソナルな提案を。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#3a332e;--bg:#fbf8f5;--accent:#c0a48a;--soft:#efe6dc;--sub:#8b8078;--line:#e8ded4}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.9;font-weight:400;-webkit-font-smoothing:antialiased}
+.en{font-family:"Jost",sans-serif;letter-spacing:.18em}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+header{position:sticky;top:0;z-index:50;background:rgba(251,248,245,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{font-family:"Jost";font-size:21px;letter-spacing:.26em;font-weight:400}
+.nav ul{display:flex;gap:30px;list-style:none}
+.nav a{color:var(--sub);text-decoration:none;font-size:13px;letter-spacing:.1em}
+.nav a:hover{color:var(--accent)}
+@media(max-width:760px){.nav ul{display:none}}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;min-height:82vh;align-items:center;gap:40px;padding:60px 0}
+@media(max-width:860px){.hero{grid-template-columns:1fr;min-height:auto;padding:56px 0 40px}}
+.hero h1{font-size:clamp(27px,4.6vw,44px);font-weight:300;line-height:1.75;letter-spacing:.06em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .sub{font-family:"Jost";font-size:12px;letter-spacing:.34em;color:var(--accent);margin-bottom:26px}
+.hero p{margin-top:26px;color:var(--sub);font-size:15px;max-width:420px}
+.hero-img{aspect-ratio:3/4;background:linear-gradient(150deg,var(--soft),#d9c7b4);display:grid;place-items:center;color:#a08a74;font-size:12px;letter-spacing:.2em;border-radius:200px 200px 8px 8px}
+.btns{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:40px;text-decoration:none;font-size:14px;letter-spacing:.08em;transition:.22s}
+.btn-p{background:var(--ink);color:#fff}.btn-p:hover{background:var(--accent)}
+.btn-line{background:#06c755;color:#fff}.btn-line:hover{opacity:.86}
+.btn-s{border:1px solid var(--line);color:var(--ink)}.btn-s:hover{background:var(--soft)}
+section{padding:88px 0}
+.sec-h{text-align:center;margin-bottom:56px}
+.sec-h .lbl{font-family:"Jost";display:block;font-size:11px;letter-spacing:.32em;color:var(--accent);margin-bottom:12px}
+.sec-h h2{font-size:clamp(21px,3.2vw,28px);font-weight:400;letter-spacing:.12em}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.card{background:#fff;padding:38px 30px;border-radius:4px;text-align:center}
+.card .no{font-family:"Jost";font-size:11px;letter-spacing:.3em;color:var(--accent);margin-bottom:16px;display:block}
+.card h3{font-size:16.5px;font-weight:500;margin-bottom:14px;letter-spacing:.06em}
+.card p{font-size:14px;color:var(--sub);line-height:1.95}
+.price{background:#fff}
+.p-list{max-width:660px;margin:0 auto}
+.p-grp{margin-bottom:40px}
+.p-grp h3{font-size:14px;letter-spacing:.18em;color:var(--accent);padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.p-row{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px dotted var(--line);font-size:15px}
+.p-row small{display:block;font-size:12.5px;color:var(--sub);margin-top:2px}
+.p-row .yen{white-space:nowrap;color:var(--sub);font-size:14.5px}
+.staff{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:30px}
+.st-ph{aspect-ratio:1;border-radius:50%;background:linear-gradient(140deg,var(--soft),#dccbb8);display:grid;place-items:center;color:#a08a74;font-size:11.5px;letter-spacing:.16em;margin:0 auto 20px;max-width:180px}
+.st{text-align:center}
+.st h3{font-size:16px;font-weight:500;letter-spacing:.08em}
+.st .role{font-family:"Jost";font-size:11px;letter-spacing:.22em;color:var(--accent);margin:6px 0 12px}
+.st p{font-size:13.5px;color:var(--sub)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:46px}
+@media(max-width:800px){.info-grid{grid-template-columns:1fr;gap:32px}}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{padding:14px 0;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{width:96px;color:var(--sub);font-weight:400;font-size:13.5px}
+.map{width:100%;height:100%;min-height:300px;border:0;border-radius:4px;filter:grayscale(.3)}
+.cta{background:var(--soft);text-align:center}
+.cta h2{font-size:clamp(20px,3vw,27px);font-weight:400;letter-spacing:.1em;margin-bottom:18px}
+.cta p{color:var(--sub);font-size:14.5px;margin-bottom:34px}
+.cta .btns{justify-content:center}
+footer{padding:46px 0 38px;text-align:center;color:var(--sub);font-size:12.5px;border-top:1px solid var(--line)}
+footer .logo{display:block;margin-bottom:16px;color:var(--ink)}
+.note{margin-top:14px;font-size:11px;color:#b3a89f}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+<div class="logo">LUCE</div>
+<nav><ul>
+<li><a href="#concept">CONCEPT</a></li><li><a href="#menu">MENU</a></li>
+<li><a href="#staff">STAFF</a></li><li><a href="#info">ACCESS</a></li>
+</ul></nav>
+</div></header>
+
+<div class="wrap hero">
+  <div>
+    <span class="sub en">PRIVATE HAIR SALON</span>
+    <h1>髪をゆだねる時間は、<br><em>自分に還る</em>時間。</h1>
+    <p>完全予約制・一日6名さまだけのプライベートサロン。カウンセリングに30分をかけ、あなたの髪質と暮らしに合う形を一緒に探します。</p>
+    <div class="btns">
+      <a href="#" class="btn btn-line">LINEで予約する</a>
+      <a href="#menu" class="btn btn-s">メニューを見る</a>
+    </div>
+  </div>
+  <div class="hero-img">サロン写真</div>
+</div>
+
+<section id="concept"><div class="wrap">
+  <div class="sec-h"><span class="lbl">CONCEPT</span><h2>LUCE が大切にしていること</h2></div>
+  <div class="cards">
+    <div class="card"><span class="no">01</span><h3>completely private</h3><p>施術は常にマンツーマン。他のお客さまと顔を合わせることのない、静かな空間をご用意しています。</p></div>
+    <div class="card"><span class="no">02</span><h3>30分のカウンセリング</h3><p>髪のお悩み、朝のスタイリングにかけられる時間、なりたい印象。すべて伺ってからハサミを入れます。</p></div>
+    <div class="card"><span class="no">03</span><h3>頭皮にやさしく</h3><p>オーガニック認証のカラー剤とトリートメントを標準採用。妊娠中・授乳中の方もご相談ください。</p></div>
+  </div>
+</div></section>
+
+<section class="price" id="menu"><div class="wrap">
+  <div class="sec-h"><span class="lbl">MENU & PRICE</span><h2>メニュー</h2></div>
+  <div class="p-list">
+    <div class="p-grp">
+      <h3>CUT</h3>
+      <div class="p-row"><span>カット<small>シャンプー・ブロー込み／カウンセリング30分</small></span><span class="yen">6,600円</span></div>
+      <div class="p-row"><span>前髪カット<small>ご来店1ヶ月以内の方は無料</small></span><span class="yen">1,100円</span></div>
+    </div>
+    <div class="p-grp">
+      <h3>COLOR</h3>
+      <div class="p-row"><span>オーガニックカラー<small>カット込み</small></span><span class="yen">13,200円</span></div>
+      <div class="p-row"><span>白髪染め（リタッチ）<small>根元3cmまで</small></span><span class="yen">7,700円</span></div>
+      <div class="p-row"><span>ハイライト<small>デザインによって変動します</small></span><span class="yen">16,500円〜</span></div>
+    </div>
+    <div class="p-grp">
+      <h3>TREATMENT & PERM</h3>
+      <div class="p-row"><span>髪質改善トリートメント<small>全5工程／約60分</small></span><span class="yen">9,900円</span></div>
+      <div class="p-row"><span>デジタルパーマ<small>カット込み</small></span><span class="yen">17,600円</span></div>
+      <div class="p-row"><span>ヘッドスパ<small>30分／単品でもご利用いただけます</small></span><span class="yen">4,400円</span></div>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--sub);font-size:13.5px;margin-top:10px">表示価格はすべて税込です。</p>
+</div></section>
+
+<section id="staff"><div class="wrap">
+  <div class="sec-h"><span class="lbl">STAFF</span><h2>スタッフ</h2></div>
+  <div class="staff">
+    <div class="st"><div class="st-ph">PHOTO</div><h3>佐藤 ひかり</h3><div class="role">OWNER / STYLIST</div><p>都内サロンで12年勤務ののち独立。骨格に合わせたショートカットを得意としています。</p></div>
+    <div class="st"><div class="st-ph">PHOTO</div><h3>中村 あゆみ</h3><div class="role">STYLIST</div><p>カラーリスト歴8年。ブリーチを使わない透明感のあるカラーをご提案します。</p></div>
+    <div class="st"><div class="st-ph">PHOTO</div><h3>木村 さや</h3><div class="role">SPA THERAPIST</div><p>頭皮ケア専門。毛髪診断士の資格を持ち、抜け毛・薄毛のご相談も承ります。</p></div>
+  </div>
+</div></section>
+
+<section class="price" id="info"><div class="wrap">
+  <div class="sec-h"><span class="lbl">ACCESS</span><h2>店舗情報</h2></div>
+  <div class="info-grid">
+    <table>
+      <tr><th>店名</th><td>hair salon LUCE</td></tr>
+      <tr><th>住所</th><td>〒000-0000<br>東京都◯◯区◯◯ 2-4-6 ◯◯ビル3F</td></tr>
+      <tr><th>電話</th><td><a href="tel:0000000000" style="color:inherit">00-0000-0000</a></td></tr>
+      <tr><th>営業時間</th><td>10:00 〜 19:00（最終受付 17:30）</td></tr>
+      <tr><th>定休日</th><td>火曜・第2水曜</td></tr>
+      <tr><th>ご予約</th><td>完全予約制（LINE・お電話）</td></tr>
+      <tr><th>駐車場</th><td>提携コインパーキングあり（2時間無料）</td></tr>
+    </table>
+    <iframe class="map" loading="lazy" title="サロンの地図"
+      src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%A7%85&output=embed"></iframe>
+  </div>
+</div></section>
+
+<section class="cta"><div class="wrap">
+  <h2>次のご予約は、LINEから。</h2>
+  <p>空き状況の確認、日時の変更もトークからそのままどうぞ。<br>はじめての方には、ご来店前にカウンセリングシートをお送りします。</p>
+  <div class="btns">
+    <a href="#" class="btn btn-line">LINEで予約する</a>
+    <a href="tel:0000000000" class="btn btn-p">電話で予約する</a>
+  </div>
+</div></section>
+
+<footer>
+  <span class="logo en">LUCE</span>
+  東京都◯◯区◯◯ 2-4-6 ／ 00-0000-0000
+  <div class="note">※ これはホームページ制作のサンプルです。実在の店舗ではありません。</div>
+</footer>
+</body>
+</html>
